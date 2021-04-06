@@ -1,5 +1,5 @@
 import {v1} from 'uuid';
-import {FilterValuesType, TaskStateType, TodoListType} from "../App";
+import {FilterValuesType, TodoListType} from "../App";
 import {
     addTodoListAC,
     changeTodoListFilterAC,
@@ -74,6 +74,7 @@ test('correct filter of todolist should be changed', () => {
     expect(endState[0].filter).toBe("all");
     expect(endState[1].filter).toBe(newFilter);
 });
+
 
 
 
