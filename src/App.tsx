@@ -55,10 +55,10 @@ function App() {
     });
 
 
-    function changeFilter(FilterValue: FilterValuesType, todoListID: string) {
+    function changeFilter(filterValue: FilterValuesType, todoListID: string) {
         const todoList = todoLists.find(tl => tl.id === todoListID)
         if (todoList) {
-            todoList.filter = FilterValue
+            todoList.filter = filterValue
             setTodoLists([...todoLists])
         }
     }
