@@ -1,5 +1,5 @@
 import {v1} from 'uuid';
-import {FilterValuesType, TodoListType} from "../App";
+import {FilterValuesType, TaskStateType, TodoListType} from "../App";
 import {
     addTodoListAC,
     changeTodoListFilterAC,
@@ -7,7 +7,6 @@ import {
     removeTodoListAC,
     todoListReducer
 } from "./todolist-reducer";
-import {Simulate} from "react-dom/test-utils";
 
 
 test('correct todolist should be removed', () => {
@@ -75,6 +74,8 @@ test('correct filter of todolist should be changed', () => {
     expect(endState[0].filter).toBe("all");
     expect(endState[1].filter).toBe(newFilter);
 });
+
+
 
 
 
