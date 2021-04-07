@@ -72,14 +72,12 @@ function AppWithRedux() {
     function addTodoList(title: string) {
         let action = addTodoListAC(title)
         dispatch(action)
-        dispatch(action)
     }
     function changeTodoListTitle(title: string, todoListID: string) {
         dispatch(changeTodoListTitleAC(title, todoListID))
     }
     function removeTodoList(todoListID: string) {
         let action = removeTodoListAC(todoListID)
-        dispatch(action)
         dispatch(action)
     }
 
