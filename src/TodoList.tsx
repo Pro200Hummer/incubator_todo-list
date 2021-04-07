@@ -23,7 +23,7 @@ export type TodoListPropsType = {
 }
 
 function TodoList(props: TodoListPropsType) {
-
+    debugger
     const tasks = props.tasks.map(taskObj => {
         const removeTask = () => {
             props.removeTask(taskObj.id, props.id);

@@ -76,9 +76,3 @@ export const changeTodoListFilterAC = (filterValue: FilterValuesType, todoListID
 export const changeTodoListTitleAC = (title: string, todoListID: string): ChangeTodoListTitleActionType => {
     return {type: "CHANGE_TODOLIST_TITLE", title, todoListID}
 }
-
-//Домашка
-// №1 проделать с 1 по 9 пунткы урока.
-// №2 Изучить useReducer; почитать про остальные хуки.
-// №3 пункты 14 и 15 занятия.
-// Подтянуть соцсеть до 47 урока.

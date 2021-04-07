@@ -65,15 +65,17 @@ function AppWithReducers() {
         dispatchToTodoLists(changeTodoListFilterAC(filterValue, todoListID))
     }
     function addTodoList(title: string) {
-        dispatchToTodoLists(addTodoListAC(title))
-        dispatchToTasks(addTodoListAC(title))
+        let action = addTodoListAC(title)
+        dispatchToTodoLists(action)
+        dispatchToTasks(action)
     }
     function changeTodoListTitle(title: string, todoListID: string) {
         dispatchToTodoLists(changeTodoListTitleAC(title, todoListID))
     }
     function removeTodoList(todoListID: string) {
-        dispatchToTodoLists(removeTodoListAC(todoListID))
-        dispatchToTasks(removeTodoListAC(todoListID))
+        let action = removeTodoListAC(todoListID)
+        dispatchToTodoLists(action)
+        dispatchToTasks(action)
     }
 
 
@@ -118,7 +120,6 @@ function AppWithReducers() {
             </Grid>
         )
     })
-
     return (
         <div>
             <AppBar position="static">
