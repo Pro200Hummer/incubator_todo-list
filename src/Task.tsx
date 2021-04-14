@@ -7,33 +7,31 @@ import {TaskType} from "./App";
 
 export type TaskPropsType = {
     task: TaskType
-    id: string
-    changeTaskTitle: (taskID: string, title: string, todoListID: string) => void;
-    changeTaskStatus: (taskID: string, isDone: boolean, todoListID: string) => void;
-    deleteTask: (taskID: string, todoListID: string) => void;
+    changeTaskTitle: (taskID: string, title: string) => void;
+    changeTaskStatus: (taskID: string, isDone: boolean) => void;
+    deleteTask: (taskID: string) => void;
 }
 
 const Task: React.FC<TaskPropsType> = React.memo(props => {
 
     const {
         task,
-        id,
         deleteTask,
         changeTaskStatus,
         changeTaskTitle
     } = props
 
     const removeTask = useCallback(() => {
-        deleteTask(task.id, id)
-    }, [task.id, id])
+        deleteTask(task.id)
+    }, [task.id])
 
     const changeStatus = useCallback((e: ChangeEvent<HTMLInputElement>) => {
-        changeTaskStatus(task.id, e.currentTarget.checked, id);
-    }, [task.id, id])
+        changeTaskStatus(task.id, e.currentTarget.checked);
+    }, [task.id])
 
     const changeTitle = useCallback((title: string) => {
-        changeTaskTitle(task.id, title, id)
-    }, [task.id, id])
+        changeTaskTitle(task.id, title)
+    }, [task.id])
 
     return (
         <li className={ task.isDone ? "is-done" : "" }>
