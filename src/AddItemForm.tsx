@@ -6,7 +6,8 @@ type AddItemFormPropsType = {
     addItem: (title: string) => void;
 }
 
-function AddItemForm(props: AddItemFormPropsType) {
+const AddItemForm = React.memo((props: AddItemFormPropsType) => {
+    console.log("AddItemForm clicked")
     const [title, setTitle] = useState<string>("");
     const [error, setError] = useState<boolean>(false);
 
@@ -21,7 +22,7 @@ function AddItemForm(props: AddItemFormPropsType) {
     }
 
     const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
-        setError(false)
+        if(error !== null) setError(false)
         setTitle(e.currentTarget.value)
     }
 
@@ -45,6 +46,6 @@ function AddItemForm(props: AddItemFormPropsType) {
             { error && <div className={ "error-message" }>{ "Title is required!" }</div> }
         </div>
     );
-}
+})
 
-export default AddItemForm;
+export default AddItemForm

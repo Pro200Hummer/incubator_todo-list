@@ -1,9 +1,9 @@
-import React, {ChangeEvent} from 'react';
+import React, {ChangeEvent, useCallback} from 'react';
 import {FilterValuesType, TaskType} from "./App";
 import './App.css';
 import AddItemForm from "./AddItemForm";
 import EditableSpan from "./EditableSpan";
-import {Button, ButtonGroup, Checkbox} from "@material-ui/core";
+import {Button, Checkbox} from "@material-ui/core";
 import IconButton from "@material-ui/core/IconButton";
 import {Delete} from "@material-ui/icons";
 
@@ -22,9 +22,16 @@ export type TodoListPropsType = {
     changeTodoListTitle: (title: string, todoListID: string) => void;
 }
 
-function TodoList(props: TodoListPropsType) {
-    debugger
-    const tasks = props.tasks.map(taskObj => {
+const TodoList = React.memo((props: TodoListPropsType) => {
+    console.log("todoList clicked")
+    let taskForTodoList = props.tasks;
+    if (props.filter === "active") {
+        taskForTodoList = taskForTodoList.filter(t => !t.isDone)
+    }
+    if (props.filter === "completed") {
+        taskForTodoList = taskForTodoList.filter(t => t.isDone)
+    }
+    const tasks = taskForTodoList.map(taskObj => {
         const removeTask = () => {
             props.removeTask(taskObj.id, props.id);
         }
@@ -49,15 +56,16 @@ function TodoList(props: TodoListPropsType) {
         )
     });
 
-    const onAllClickHandler = () => {
+    const onAllClickHandler = useCallback(() => {
         props.changeFilter("all", props.id)
-    }
-    const onActiveClickHandler = () => {
+    }, [])
+    const onActiveClickHandler = useCallback( () => {
         props.changeFilter("active", props.id)
-    }
-    const onCompleteClickHandler = () => {
+    }, [])
+    const onCompleteClickHandler = useCallback( () => {
         props.changeFilter("completed", props.id)
-    }
+    }, [])
+
     const removeTodoList = () => {
         props.removeTodoList(props.id)
     }
@@ -103,6 +111,6 @@ function TodoList(props: TodoListPropsType) {
             </div>
         </div>
     </div>
-}
+})
 
 export default TodoList;

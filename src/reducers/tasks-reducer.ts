@@ -10,7 +10,7 @@ export type TaskStateType = {
     [key: string]: TaskType[]
 };
 
-const initialState:TaskStateType = {}
+const initialState: TaskStateType = {}
 
 export type RemoveTaskActionType = {
     type: "REMOVE-TASK"
@@ -63,13 +63,19 @@ export const tasksReducer = (state = initialState, action: ActionType): TaskStat
             if (taskForChangeStatus) {
                 taskForChangeStatus.isDone = action.isDone
             }
-            return {...state}
+            return {
+                ...state, [action.todoListID]: state[action.todoListID].map(t => t.id === action.taskID ?
+                    {...t, isDone: action.isDone} : t)
+            }
         case "CHANGE-TASK-TITLE":
             const taskForChangeTitle: TaskType | undefined = state[action.todoListID].find(t => t.id === action.taskID)
             if (taskForChangeTitle) {
                 taskForChangeTitle.title = action.title
             }
-            return {...state}
+            return {
+                ...state, [action.todoListID]: state[action.todoListID].map(t => t.id === action.taskID ?
+                    {...t, title: action.title} : t)
+            }
         case "ADD_TODOLIST":
             return {...state, [action.todoListID]: []}
         case "REMOVE_TODOLIST":
