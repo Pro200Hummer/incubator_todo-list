@@ -1,78 +1,199 @@
-import React, {useEffect, useState} from 'react';
-import {todoListAPI, TodoListAPIType} from "../api/TodoListAPI";
+import React, {ChangeEvent, KeyboardEvent, MouseEvent, useEffect, useState} from 'react';
+import {TaskAPIType, todoListApi, TodoListAPIType} from "../api/Todo-list-api";
+import {TextField} from "@material-ui/core";
 
 export default {
-    title: "TODOLISTS API"
+    title: "Todo-list-API"
 }
 
-export const GetTodoLists = () => {
-    const [state, setState] = useState<TodoListAPIType[] | null>(null)
+
+export const TodoListsAPI = () => {
+    /* States for TodoLists, and input handlers */
+    const [todoLists, setTodoLists] = useState<TodoListAPIType[] | null>(null)
+    const [addList, setAddList] = useState<string>("")
+
+    /* Retrieving lists on page load */
     useEffect(() => {
-        todoListAPI.getTodoLists()
+        todoListApi.getTodoLists()
             .then(res => {
-                setState(res.data);
-                console.log(res.data)
+                setTodoLists(res.data);
             })
+    }, []);
 
-    }, [])
 
+    /* Input handlers */
+    const onChangeAddListHandler = (e: ChangeEvent<HTMLInputElement>) => {
+        setAddList(e.currentTarget.value)
+    }
+
+    /* Buttons handlers */
+    const onClickAddListHandler = (e: MouseEvent<HTMLButtonElement>) => {
+        todoListApi.createTodoList(addList)
+            .then(res => {
+                if (res.data.resultCode === 1) {
+                    setAddList(res.data.messages[0])
+                }
+            })
+        setAddList("")
+    }
+    const onClickDeleteListHandler = (todoListID: string) => {
+        todoListApi.deleteTodoList(todoListID)
+            .then(res => {
+                // Error handler
+            })
+    }
+
+    const changeListTitle = (todoListID: string, newTitle: string) => {
+        todoListApi.updateTodoList(todoListID, newTitle)
+            .then(res => {
+                // Error handler
+            })
+    }
+
+    /* UI */
     return (
-        <>
+        <div>
+            <input type="text" value={ addList } onChange={ onChangeAddListHandler }/>
+            <button onClick={ onClickAddListHandler }>Add List</button>
             {
-                state && state.map((s) => {
-                    return(
+                todoLists && todoLists.map((s) => {
+                    const deleteList = (e: MouseEvent<HTMLButtonElement>) => {
+                        onClickDeleteListHandler(s.id)
+                    }
+                    const changeItem = (title: string) => {
+                        changeListTitle(s.id, title)
+                    }
+                    return (
                         <div>
-                            <p>{s.title}</p>
-                            <p>Todo List ID: {s.id}</p>
+                            <EditableSpan title={ s.title } changeItem={ changeItem }/>
+                            <button onClick={ deleteList }>X</button>
+                            <TasksAPI todoListID={ s.id }/>
                             <hr/>
                         </div>
                     )
                 })
             }
-        </>
+        </div>
+    )
+};
+
+
+/* Tasks Component */
+type TasksAPIPropsType = {
+    todoListID: string
+}
+const TasksAPI = (props: TasksAPIPropsType) => {
+    const {
+        todoListID
+    } = props
+
+    /* States for Tasks and input handlers */
+    const [tasks, setTasks] = useState<TaskAPIType | null>(null)
+    const [addTask, setAddTask] = useState<string>("")
+
+    /* Retrieving lists on page load */
+    useEffect(() => {
+        todoListApi.getTasks(todoListID)
+            .then(res => {
+                setTasks(res.data);
+            })
+
+    }, []);
+
+    /* Input handlers */
+    const onChangeAddTaskHandler = (e: ChangeEvent<HTMLInputElement>) => {
+        setAddTask(e.currentTarget.value)
+    }
+
+    /* Buttons handlers */
+    const onClickAddTaskHandler = (e: MouseEvent<HTMLButtonElement>) => {
+        todoListApi.createTask(todoListID, addTask)
+            .then(res => {
+                // Error handler
+            })
+        setAddTask("")
+    }
+    const onClickDeleteTaskHandler = (taskID: string) => {
+        todoListApi.deleteTask(todoListID, taskID)
+            .then(res => {
+                // Error handler
+            })
+    }
+    const changeTaskTitle = (todoListID: string, taskID: string, newTitle: string) => {
+        todoListApi.updateTask(todoListID, taskID, newTitle)
+            .then(res => {
+                // Error handler
+            })
+    }
+
+    /* UI */
+    return (
+        <div>
+            <input type="text" value={ addTask } onChange={ onChangeAddTaskHandler }/>
+            <button onClick={ onClickAddTaskHandler }>Add Task</button>
+            <ul>
+                {
+                    tasks && tasks.items.map((s) => {
+                        const deleteTask = (e: MouseEvent<HTMLButtonElement>) => {
+                            onClickDeleteTaskHandler(s.id)
+                        }
+                        const changeItem = (title: string) => {
+                            changeTaskTitle(s.todoListId, s.id, title)
+                        }
+                        return (
+                            <>
+                                <li><EditableSpan title={s.title} changeItem={changeItem}/></li>
+                                <button onClick={ deleteTask }>X</button>
+                                <hr/>
+                            </>
+                        )
+                    })
+                }
+            </ul>
+
+        </div>
     )
 }
 
-export const CreateTodoList = () => {
-    const [state, setState] = useState<any>(null)
-    useEffect(() => {
-        todoListAPI.createTodoList("Some List")
-            .then(res => {
-                setState(res.data)
-            })
-    }, [])
+/* Component to change some title */
+type EditableSpanPropsType = {
+    title: string
+    changeItem: (title: string) => void
+}
+
+const EditableSpan = React.memo((props: EditableSpanPropsType) => {
+    console.log("EditSpan clicked")
+    const [editMode, setEditMode] = useState<boolean>(false);
+    const [title, setTitle] = useState<string>(props.title)
+
+    const onEditMode = () => {
+        setEditMode(true)
+    }
+
+    const offEditMode = () => {
+        setEditMode(false)
+        props.changeItem(title)
+    }
+
+    const changeTitle = (e: ChangeEvent<HTMLInputElement>) => {
+        setTitle(e.currentTarget.value)
+    }
+
+    const onKeyPressEditMode = (e: KeyboardEvent<HTMLInputElement>) => {
+        if (e.key === "Enter") offEditMode()
+    }
 
     return (
-        <div>{ JSON.stringify(state) }</div>
-    )
-}
+        editMode ?
+            <TextField
+                value={ title }
+                autoFocus={ true }
+                onBlur={ offEditMode }
+                onChange={ changeTitle }
+                onKeyPress={ onKeyPressEditMode! }
+            /> :
+            <span onDoubleClick={ onEditMode }>{ props.title }</span>
+    );
+})
 
-export const DeleteTodoList = () => {
-    const [state, setState] = useState<any>(null)
-    useEffect(() => {
-        const todoListID = 'd546f89a-e570-40d6-b36b-c80b187a1527'
-        todoListAPI.deleteTodoList(todoListID)
-            .then(res => {
-                setState(res.data)
-            })
-    }, [])
-
-    return (
-        <div>{ JSON.stringify(state) }</div>
-    )
-}
-
-export const UpdateTodoList = () => {
-    const [state, setState] = useState<any>(null)
-    useEffect(() => {
-        const todoListID = 'cbf5dbd0-597e-4db7-8859-12f20021852d'
-        todoListAPI.updateTodoList(todoListID, "Some Title")
-            .then(res => {
-                setState(res.data)
-            })
-    }, [])
-
-    return (
-        <div>{ JSON.stringify(state) }</div>
-    )
-}
+/*------------------------------------------------------------------------------------*/
