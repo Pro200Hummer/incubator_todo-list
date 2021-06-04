@@ -14,50 +14,54 @@ import Paper from "@material-ui/core/Paper";
 import {
     addTodoListAC,
     changeTodoListFilterAC,
-    changeTodoListTitleAC, removeTodoListAC,
+    changeTodoListTitleAC, FilterValuesType, removeTodoListAC,
     todoListReducer
 } from "./reducers/todolist-reducer";
-import {addTaskAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC, tasksReducer} from "./reducers/tasks-reducer";
+import {
+    addTaskAC,
+    changeTaskStatusAC,
+    changeTaskTitleAC,
+    removeTaskAC,
+    tasksReducer,
+    TaskStatuses, TodoTaskPriority
+} from "./reducers/tasks-reducer";
 
-/*export type FilterValuesType = "all" | "active" | "completed";
-export type TaskType = {
-    id: string
-    title: string
-    isDone: boolean
-};
-export type TodoListType = {
-    id: string
-    title: string
-    filter: FilterValuesType
-};
-export type TaskStateType = {
-    [key: string]: TaskType[]
-};*/
-
-/*
 function AppWithReducers() {
     //BLL
     let todoListID1 = v1();
     let todoListID2 = v1();
 
     let [todoLists, dispatchToTodoLists] = useReducer(todoListReducer, [
-        {id: todoListID1, title: "What to learn", filter: "all"},
-        {id: todoListID2, title: "What to buy", filter: "all"},
+        {id: todoListID1, title: "What to learn", filter: "all", addedDate: "", order: 0},
+        {id: todoListID2, title: "What to buy", filter: "all", addedDate: "", order: 0},
     ]);
     let [tasks, dispatchToTasks] = useReducer(tasksReducer,{
         [todoListID1]: [
-            {id: v1(), title: "HTML & CSS", isDone: true},
-            {id: v1(), title: "JS", isDone: true},
-            {id: v1(), title: "ReactJS", isDone: false},
-            {id: v1(), title: "TypeScript", isDone: false},
-            {id: v1(), title: "Redux", isDone: false},
+            {
+                id: v1(), title: "HTML & CSS",
+                status: TaskStatuses.Completed,
+                todoListId: todoListID1,
+                order: 0,
+                priority: TodoTaskPriority.Low,
+                startDate: "",
+                deadline: "",
+                addedDate: "",
+                description: ""
+            },
         ],
         [todoListID2]: [
-            {id: v1(), title: "Milk", isDone: true},
-            {id: v1(), title: "Bread", isDone: true},
-            {id: v1(), title: "Beer", isDone: false},
-            {id: v1(), title: "Meat", isDone: false},
-            {id: v1(), title: "Chips", isDone: false},
+            {
+                id: v1(), title: "Milk",
+                status: TaskStatuses.Completed,
+                todoListId: todoListID2,
+                order: 0,
+                priority: TodoTaskPriority.Low,
+                startDate: "",
+                deadline: "",
+                addedDate: "",
+                description: ""
+            },
+
         ],
     });
 
@@ -80,8 +84,8 @@ function AppWithReducers() {
     }
 
 
-    function changeStatus(taskID: string, isDone: boolean, todoListID: string) {
-        dispatchToTasks(changeTaskStatusAC(taskID, isDone, todoListID))
+    function changeStatus(taskID: string, status: TaskStatuses, todoListID: string) {
+        dispatchToTasks(changeTaskStatusAC(taskID, status, todoListID))
     }
     function changeTaskTitle(taskID: string, title: string, todoListID: string) {
         dispatchToTasks(changeTaskTitleAC(taskID, title, todoListID))
@@ -96,10 +100,10 @@ function AppWithReducers() {
     const content = todoLists.map(tl => {
         let taskForTodoList = tasks[tl.id]
         if (tl.filter === "active") {
-            taskForTodoList = tasks[tl.id].filter(t => !t.isDone)
+            taskForTodoList = tasks[tl.id].filter(t => t.status === TaskStatuses.New)
         }
         if (tl.filter === "completed") {
-            taskForTodoList = tasks[tl.id].filter(t => t.isDone)
+            taskForTodoList = tasks[tl.id].filter(t => t.status === TaskStatuses.Completed)
         }
         return (
             <Grid item key={ tl.id }>
@@ -146,4 +150,3 @@ function AppWithReducers() {
 }
 
 export default AppWithReducers;
-*/

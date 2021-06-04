@@ -3,12 +3,13 @@ import {Checkbox} from "@material-ui/core";
 import EditableSpan from "./EditableSpan";
 import IconButton from "@material-ui/core/IconButton";
 import {Delete} from "@material-ui/icons";
-import {TaskType} from "./App";
+import {TaskStatuses, TaskType} from "./reducers/tasks-reducer";
+
 
 export type TaskPropsType = {
     task: TaskType
     changeTaskTitle: (taskID: string, title: string) => void;
-    changeTaskStatus: (taskID: string, isDone: boolean) => void;
+    changeTaskStatus: (taskID: string, status: TaskStatuses) => void;
     deleteTask: (taskID: string) => void;
 }
 
@@ -26,19 +27,22 @@ const Task: React.FC<TaskPropsType> = React.memo(props => {
     }, [task.id])
 
     const changeStatus = useCallback((e: ChangeEvent<HTMLInputElement>) => {
-        changeTaskStatus(task.id, e.currentTarget.checked);
+        const taskStatus = e.currentTarget.checked ? TaskStatuses.Completed : TaskStatuses.New
+        changeTaskStatus(task.id, taskStatus);
     }, [task.id])
 
     const changeTitle = useCallback((title: string) => {
         changeTaskTitle(task.id, title)
     }, [task.id])
 
+
+
     return (
-        <li className={ task.isDone ? "is-done" : "" }>
+        <li className={ task.status === TaskStatuses.Completed ? "is-done" : "" }>
             <Checkbox
                 color={ "secondary" }
                 onChange={ changeStatus }
-                checked={ task.isDone }
+                checked={ task.status === TaskStatuses.Completed }
             />
             <EditableSpan title={ task.title } changeItem={ changeTitle }/>
             <IconButton onClick={ removeTask }>

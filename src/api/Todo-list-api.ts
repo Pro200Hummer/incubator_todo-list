@@ -1,28 +1,11 @@
 import axios from "axios";
+import {TaskType} from "../reducers/tasks-reducer";
+import {TodoListType} from "../reducers/todolist-reducer";
 
 /* Types */
-export type TaskType = {
-    "id": string,
-    "title": string,
-    "description": null | string,
-    "todoListId": string,
-    "order": number,
-    "status": number,
-    "priority": number,
-    "startDate": string,
-    "deadline": string,
-    "addedDate": string
-}
 
 export type TaskAPIType = {
     items: TaskType[]
-}
-
-export type TodoListAPIType = {
-    "id": string,
-    "title": string,
-    "addedDate": string,
-    "order": number
 }
 
 export type ResponseType<D = {}> = {
@@ -36,20 +19,20 @@ const instance = axios.create({
     baseURL: `https://social-network.samuraijs.com/api/1.1/`,
     withCredentials: true,
     headers: {
-        'API-key': '73b1837e-5f6e-44e2-a66e-fd7ff9204f6e'
+        'API-key': 'c3ff16a4-4b9d-490a-b188-2440deac59e8'
     }
 })
 
 /* API */
 export const todoListApi = {
     createTodoList(todoListTitle: string) {
-        return instance.post<ResponseType<{ item: TodoListAPIType }>>(`todo-lists`, {
+        return instance.post<ResponseType<{ item: TodoListType }>>(`todo-lists`, {
             title: todoListTitle
         })
 
     },
     getTodoLists() {
-        return instance.get<TodoListAPIType[]>(`todo-lists`)
+        return instance.get<TodoListType[]>(`todo-lists`)
     },
     updateTodoList(todoListID: string, todoListTitle: string) {
         return instance.put<ResponseType>(`todo-lists/${ todoListID }`, {

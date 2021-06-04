@@ -1,11 +1,34 @@
 import {v1} from "uuid";
 import {AddTodoListActionType, RemoveTodoListActionType} from "./todolist-reducer";
 
+export enum TaskStatuses {
+    New = 0,
+    InProgress = 1,
+    Completed = 2,
+    Draft = 3
+}
+
+export enum TodoTaskPriority {
+    Low = 0,
+    Middle = 1,
+    Hi = 2,
+    Urgently = 3,
+    Later = 4
+}
+
 export type TaskType = {
-    id: string
-    title: string
-    isDone: boolean
-};
+    id: string,
+    title: string,
+    description: null | string,
+    todoListId: string,
+    order: number,
+    status: TaskStatuses,
+    priority: TodoTaskPriority,
+    startDate: string,
+    deadline: string,
+    addedDate: string
+}
+
 export type TaskStateType = {
     [key: string]: TaskType[]
 };
@@ -25,7 +48,7 @@ export type AddTaskActionType = {
 export type ChangeTaskStatusActionType = {
     type: "CHANGE-TASK-STATUS"
     taskID: string
-    isDone: boolean
+    status: TaskStatuses
     todoListID: string
 }
 export type ChangeTaskTitleActionType = {
@@ -53,7 +76,14 @@ export const tasksReducer = (state = initialState, action: ActionType): TaskStat
             const newTask: TaskType = {
                 id: v1(),
                 title: action.title,
-                isDone: false,
+                status: TaskStatuses.New,
+                todoListId: action.todoListID,
+                order: 0,
+                priority: TodoTaskPriority.Low,
+                startDate: "",
+                deadline: "",
+                addedDate: "",
+                description: ""
             }
             const allTodoListTasks = state[action.todoListID]
             state[action.todoListID] = [newTask, ...allTodoListTasks]
@@ -61,11 +91,11 @@ export const tasksReducer = (state = initialState, action: ActionType): TaskStat
         case "CHANGE-TASK-STATUS":
             const taskForChangeStatus: TaskType | undefined = state[action.todoListID].find(t => t.id === action.taskID)
             if (taskForChangeStatus) {
-                taskForChangeStatus.isDone = action.isDone
+                taskForChangeStatus.status = action.status
             }
             return {
                 ...state, [action.todoListID]: state[action.todoListID].map(t => t.id === action.taskID ?
-                    {...t, isDone: action.isDone} : t)
+                    {...t, status: action.status} : t)
             }
         case "CHANGE-TASK-TITLE":
             const taskForChangeTitle: TaskType | undefined = state[action.todoListID].find(t => t.id === action.taskID)
@@ -93,8 +123,8 @@ export const removeTaskAC = (taskID: string, todoListID: string): RemoveTaskActi
 export const addTaskAC = (title: string, todoListID: string): AddTaskActionType => {
     return {type: "ADD-TASK", title, todoListID}
 }
-export const changeTaskStatusAC = (taskID: string, isDone: boolean, todoListID: string): ChangeTaskStatusActionType => {
-    return {type: "CHANGE-TASK-STATUS", taskID, isDone, todoListID}
+export const changeTaskStatusAC = (taskID: string, status: TaskStatuses, todoListID: string): ChangeTaskStatusActionType => {
+    return {type: "CHANGE-TASK-STATUS", taskID, status, todoListID}
 }
 export const changeTaskTitleAC = (taskID: string, title: string, todoListID: string): ChangeTaskTitleActionType => {
     return {type: "CHANGE-TASK-TITLE", taskID, title, todoListID}

@@ -1,6 +1,8 @@
 import React, {ChangeEvent, KeyboardEvent, MouseEvent, useEffect, useState} from 'react';
-import {TaskAPIType, todoListApi, TodoListAPIType} from "../api/Todo-list-api";
 import {TextField} from "@material-ui/core";
+import {TodoListType} from "../reducers/todolist-reducer";
+import {TaskAPIType, todoListApi} from "../api/Todo-list-api";
+
 
 export default {
     title: "Todo-list-API"
@@ -9,7 +11,7 @@ export default {
 
 export const TodoListsAPI = () => {
     /* States for TodoLists, and input handlers */
-    const [todoLists, setTodoLists] = useState<TodoListAPIType[] | null>(null)
+    const [todoLists, setTodoLists] = useState<TodoListType[] | null>(null)
     const [addList, setAddList] = useState<string>("")
 
     /* Retrieving lists on page load */
@@ -134,7 +136,7 @@ const TasksAPI = (props: TasksAPIPropsType) => {
             <ul>
                 {
                     tasks && tasks.items.map((s) => {
-                        const deleteTask = (e: MouseEvent<HTMLButtonElement>) => {
+                        const deleteTask = () => {
                             onClickDeleteTaskHandler(s.id)
                         }
                         const changeItem = (title: string) => {
