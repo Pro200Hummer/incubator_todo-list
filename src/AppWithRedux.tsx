@@ -14,17 +14,12 @@ import Paper from "@material-ui/core/Paper";
 import {useDispatch, useSelector} from "react-redux";
 import {AppRootStateType} from "./reducers/store";
 import {
-    addTodoListAC,
-    changeTodoListFilterAC,
-    changeTodoListTitleAC, changeTodoListTitleTC, createTodoListTC, deleteTodoListTC, fetchTodoListsTC,
-    FilterValuesType, removeTodoListAC,
+    changeTodoListFilterAC,changeTodoListTitleTC, createTodoListTC, deleteTodoListTC, fetchTodoListsTC,
+    FilterValuesType,
     TodoListDomainType
 } from "./reducers/todolist-reducer";
 import {
-    addTaskAC, addTaskTC,
-    changeTaskStatusAC, changeTaskStatusTC,
-    changeTaskTitleAC, changeTaskTitleTC,
-    removeTaskAC, removeTaskTC,
+    addTaskTC, changeTaskStatusTC, changeTaskTitleTC,removeTaskTC,
     TaskStateType,
     TaskStatuses
 } from "./reducers/tasks-reducer";
