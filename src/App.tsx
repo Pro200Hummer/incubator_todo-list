@@ -62,7 +62,7 @@ function App() {
         }
     }
 
-    function addTodoList(title: string) {
+    function addTodoListAC(title: string) {
         const newTodoListID = v1();
         const newTodoList: TodoListDomainType = {
             id: newTodoListID, title: title, filter: "all", order: 0, addedDate: ""
@@ -172,7 +172,7 @@ function App() {
             </AppBar>
             <Container fixed={ true }>
                 <Grid container style={ {margin: "20px 0px"} }>
-                    <AddItemForm addItem={ addTodoList }/>
+                    <AddItemForm addItem={ addTodoListAC }/>
                 </Grid>
                 <Grid container spacing={ 2 }>{ content }</Grid>
             </Container>

@@ -1,12 +1,12 @@
 import {
-    addTaskAC,
-    changeTaskStatusAC,
-    changeTaskTitleAC,
-    removeTaskAC,
+    addTask,
+    changeTaskStatus,
+    changeTaskTitle,
+    removeTask,
     tasksReducer, TaskStateType,
     TaskStatuses, TodoTaskPriority
 } from './tasks-reducer';
-import {addTodoListAC, removeTodoListAC} from "./todolist-reducer";
+import {addTodoListAC, removeTodoList} from "./todolist-reducer";
 
 const restTaskParams = {
     order: 0,
@@ -35,7 +35,7 @@ beforeEach(() => {
 
 test('correct task should be deleted from correct array', () => {
 
-    const action = removeTaskAC("2", "todolistId2");
+    const action = removeTask("2", "todolistId2");
 
     const endState = tasksReducer(startState, action)
 
@@ -54,7 +54,7 @@ test('correct task should be deleted from correct array', () => {
 });
 test('correct task should be added to correct array', () => {
 
-    const action = addTaskAC("juice", "todolistId2");
+    const action = addTask("juice", "todolistId2");
 
     const endState = tasksReducer(startState, action)
 
@@ -66,7 +66,7 @@ test('correct task should be added to correct array', () => {
 })
 test('status of specified task should be changed', () => {
 
-    const action = changeTaskStatusAC("2", TaskStatuses.New, "todolistId2");
+    const action = changeTaskStatus("2", TaskStatuses.New, "todolistId2");
 
     const endState = tasksReducer(startState, action)
 
@@ -75,7 +75,7 @@ test('status of specified task should be changed', () => {
 });
 test('title of specified task should be changed', () => {
 
-    const action = changeTaskTitleAC("3", "coffee", "todolistId2");
+    const action = changeTaskTitle("3", "coffee", "todolistId2");
 
     const endState = tasksReducer(startState, action)
 
@@ -100,7 +100,7 @@ test('new array should be added when new todolist is added', () => {
 });
 test('property with todolistId should be deleted', () => {
 
-    const action = removeTodoListAC("todolistId2");
+    const action = removeTodoList("todolistId2");
 
     const endState = tasksReducer(startState, action)
 

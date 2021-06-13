@@ -14,6 +14,15 @@ export type ResponseType<D = {}> = {
     "resultCode": number
 }
 
+export type UpdateTaskRequestType = {
+    title?: string
+    description?: string | null
+    status?: number
+    priority?: number
+    startDate?: string | null
+    deadline?: string | null
+}
+
 /* Instance to requests */
 const instance = axios.create({
     baseURL: `https://social-network.samuraijs.com/api/1.1/`,
@@ -46,16 +55,14 @@ export const todoListApi = {
         return instance.get<TaskAPIType>(`todo-lists/${ todoListID }/tasks`)
     },
     createTask(todoListID: string, taskTitle: string) {
-        return instance.post<ResponseType<{ item: TaskAPIType }>>(`todo-lists/${ todoListID }/tasks`, {
+        return instance.post<ResponseType<{ item: TaskType }>>(`todo-lists/${ todoListID }/tasks`, {
             title: taskTitle
         })
     },
     deleteTask(todoListID: string, taskID: string) {
         return instance.delete<ResponseType>(`todo-lists/${ todoListID }/tasks/${ taskID }`)
     },
-    updateTask(todoListID: string, taskID: string, newTitle: string) {
-        return instance.put<ResponseType>(`todo-lists/${ todoListID }/tasks/${ taskID }`, {
-            title: newTitle
-        })
+    updateTask(todoListID: string, taskID: string, updateTaskRequest: UpdateTaskRequestType) {
+        return instance.put<ResponseType>(`todo-lists/${ todoListID }/tasks/${ taskID }`, updateTaskRequest)
     }
 }

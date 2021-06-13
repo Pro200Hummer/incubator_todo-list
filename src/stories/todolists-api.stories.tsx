@@ -122,7 +122,9 @@ const TasksAPI = (props: TasksAPIPropsType) => {
             })
     }
     const changeTaskTitle = (todoListID: string, taskID: string, newTitle: string) => {
-        todoListApi.updateTask(todoListID, taskID, newTitle)
+        todoListApi.updateTask(todoListID, taskID, {
+            title: newTitle
+        })
             .then(res => {
                 // Error handler
             })

@@ -13,19 +13,18 @@ import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
 import {
     addTodoListAC,
-    changeTodoListFilterAC,
-    changeTodoListTitleAC, FilterValuesType, removeTodoListAC,
+    changeTodoListFilterAC, changeTodoListTitleAC,
+    FilterValuesType, removeTodoListAC,
     todoListReducer
 } from "./reducers/todolist-reducer";
 import {
-    addTaskAC,
-    changeTaskStatusAC,
-    changeTaskTitleAC,
-    removeTaskAC,
+    addTaskAC, addTaskTC,
+    changeTaskStatusAC, changeTaskTitleAC, removeTaskAC,
     tasksReducer,
     TaskStatuses, TodoTaskPriority
 } from "./reducers/tasks-reducer";
 
+/*
 function AppWithReducers() {
     //BLL
     let todoListID1 = v1();
@@ -94,7 +93,7 @@ function AppWithReducers() {
         dispatchToTasks(removeTaskAC(taskID, todoListID))
     }
     function addTask (title: string, todoListID: string) {
-        dispatchToTasks(addTaskAC(title, todoListID))
+        dispatchToTasks(addTaskTC(todoListID, title))
     }
 
     const content = todoLists.map(tl => {
@@ -150,3 +149,4 @@ function AppWithReducers() {
 }
 
 export default AppWithReducers;
+*/
