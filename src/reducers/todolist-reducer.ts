@@ -21,8 +21,7 @@ export type RemoveTodoListActionType = {
 }
 export type AddTodoListActionType = {
     type: "ADD_TODOLIST",
-    todoListTitle: string,
-    todoListID: string
+    todoList: TodoListType
 }
 export type ChangeFilterActionType = {
     type: "CHANGE_TODOLIST_FILTER",
@@ -49,13 +48,7 @@ export type TodoListsActionType =
 export const todoListReducer = (state = initialState, action: TodoListsActionType): TodoListDomainType[] => {
     switch (action.type) {
         case "ADD_TODOLIST": {
-            const newTodoList: TodoListDomainType = {
-                id: action.todoListID,
-                title: action.todoListTitle,
-                filter: "all",
-                addedDate: "",
-                order: 0
-            }
+            const newTodoList: TodoListDomainType = {...action.todoList, filter: "all"}
             return [newTodoList, ...state]
         }
         case "REMOVE_TODOLIST": {
@@ -92,8 +85,8 @@ export const todoListReducer = (state = initialState, action: TodoListsActionTyp
     }
 }
 
-export const addTodoListAC = (todoListTitle: string, todoListID: string): AddTodoListActionType => {
-    return {type: "ADD_TODOLIST", todoListTitle, todoListID}
+export const addTodoListAC = (todoList: TodoListType): AddTodoListActionType => {
+    return {type: "ADD_TODOLIST", todoList}
 }
 export const removeTodoListAC = (todoListID: string): RemoveTodoListActionType => {
     return {type: "REMOVE_TODOLIST", todoListID}
@@ -132,8 +125,7 @@ export const deleteTodoListTC = (todoListID: string): AppThunkType => async disp
 export const createTodoListTC = (todoListTitle: string): AppThunkType => async dispatch => {
     try {
         const res = await todoListApi.createTodoList(todoListTitle)
-        const todoListID = res.data.data.item.id
-        dispatch(addTodoListAC(todoListTitle, todoListID))
+        dispatch(addTodoListAC(res.data.data.item))
     } catch (e) {
         throw new Error(e)
     }
