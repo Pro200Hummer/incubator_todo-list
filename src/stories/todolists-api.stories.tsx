@@ -1,7 +1,6 @@
 import React, {ChangeEvent, KeyboardEvent, MouseEvent, useEffect, useState} from 'react';
 import {TextField} from "@material-ui/core";
-import {TodoListType} from "../reducers/todolist-reducer";
-import {TaskAPIType, todoListApi} from "../api/Todo-list-api";
+import {TaskAPIType, todoListApi, TodoListType} from "../api/Todo-list-api";
 
 
 export default {

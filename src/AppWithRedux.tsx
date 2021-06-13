@@ -15,14 +15,11 @@ import {useDispatch, useSelector} from "react-redux";
 import {AppRootStateType} from "./reducers/store";
 import {
     changeTodoListFilterAC,changeTodoListTitleTC, createTodoListTC, deleteTodoListTC, fetchTodoListsTC,
-    FilterValuesType,
-    TodoListDomainType
 } from "./reducers/todolist-reducer";
 import {
-    addTaskTC, changeTaskStatusTC, changeTaskTitleTC,removeTaskTC,
-    TaskStateType,
-    TaskStatuses
+    addTaskTC, changeTaskStatusTC, changeTaskTitleTC, removeTaskTC, TaskStateType
 } from "./reducers/tasks-reducer";
+import {FilterValuesType, TaskStatuses, TodoListDomainType} from "./api/Todo-list-api";
 
 function AppWithRedux() {
 

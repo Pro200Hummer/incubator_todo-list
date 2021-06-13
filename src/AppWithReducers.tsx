@@ -1,5 +1,5 @@
 import React, {useReducer} from 'react';
-import './App.css';
+/*import './App.css';
 import TodoList from './TodoList';
 import {v1} from "uuid";
 import AddItemForm from "./AddItemForm";
@@ -22,7 +22,7 @@ import {
     changeTaskStatusAC, changeTaskTitleAC, removeTaskAC,
     tasksReducer,
     TaskStatuses, TodoTaskPriority
-} from "./reducers/tasks-reducer";
+} from "./reducers/tasks-reducer";*/
 
 /*
 function AppWithReducers() {

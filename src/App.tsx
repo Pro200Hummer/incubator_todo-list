@@ -11,8 +11,8 @@ import Toolbar from "@material-ui/core/Toolbar";
 import {Menu} from "@material-ui/icons";
 import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
-import {FilterValuesType, TodoListDomainType} from "./reducers/todolist-reducer";
-import {TaskStateType, TaskStatuses, TaskType, TodoTaskPriority} from "./reducers/tasks-reducer";
+import {FilterValuesType, TaskStatuses, TaskType, TodoListDomainType, TodoTaskPriority} from "./api/Todo-list-api";
+import {TaskStateType} from "./reducers/tasks-reducer";
 
 function App() {
     //BLL

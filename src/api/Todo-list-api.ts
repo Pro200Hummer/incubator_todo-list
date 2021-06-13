@@ -1,27 +1,4 @@
 import axios from "axios";
-import {TaskType} from "../reducers/tasks-reducer";
-import {TodoListType} from "../reducers/todolist-reducer";
-
-/* Types */
-
-export type TaskAPIType = {
-    items: TaskType[]
-}
-
-export type ResponseType<D = {}> = {
-    "data": D
-    "messages": string[]
-    "resultCode": number
-}
-
-export type UpdateTaskRequestType = {
-    title?: string
-    description?: string | null
-    status?: number
-    priority?: number
-    startDate?: string | null
-    deadline?: string | null
-}
 
 /* Instance to requests */
 const instance = axios.create({
@@ -65,4 +42,63 @@ export const todoListApi = {
     updateTask(todoListID: string, taskID: string, updateTaskRequest: UpdateTaskRequestType) {
         return instance.put<ResponseType>(`todo-lists/${ todoListID }/tasks/${ taskID }`, updateTaskRequest)
     }
+}
+
+/* Types */
+export enum TaskStatuses {
+    New = 0,
+    InProgress = 1,
+    Completed = 2,
+    Draft = 3
+}
+
+export enum TodoTaskPriority {
+    Low = 0,
+    Middle = 1,
+    Hi = 2,
+    Urgently = 3,
+    Later = 4
+}
+export type FilterValuesType = "all" | "active" | "completed";
+
+export type TodoListType = {
+    id: string,
+    title: string,
+    addedDate: string,
+    order: number
+}
+export type TodoListDomainType = TodoListType & {
+    filter: FilterValuesType
+}
+
+export type TaskType = {
+    id: string,
+    title: string,
+    description: null | string,
+    todoListId: string,
+    order: number,
+    status: TaskStatuses,
+    priority: TodoTaskPriority,
+    startDate: string,
+    deadline: string,
+    addedDate: string
+}
+
+export type TaskAPIType = {
+    items: TaskType[]
+}
+
+export type ResponseType<D = {}> = {
+    "data": D
+    "messages": string[]
+    "resultCode": number
+}
+
+export type UpdateTaskRequestType = {
+    title?: string
+    description?: string | null
+    status?: TaskStatuses
+    priority?: TodoTaskPriority
+    startDate?: string | null
+    deadline?: string | null
 }
