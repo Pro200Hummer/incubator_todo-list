@@ -9,7 +9,7 @@ export default {
 
 
 export const TodoListsAPI = () => {
-    /* States for TodoLists, and input handlers */
+    /* States for TodoList, and input handlers */
     const [todoLists, setTodoLists] = useState<TodoListType[] | null>(null)
     const [addList, setAddList] = useState<string>("")
 

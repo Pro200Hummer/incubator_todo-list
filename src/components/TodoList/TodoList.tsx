@@ -1,99 +1,57 @@
-import React, {useCallback, useEffect} from 'react';
-import './App.css';
-import AddItemForm from "./AddItemForm";
-import EditableSpan from "./EditableSpan";
+import React, {useCallback} from 'react';
+import '../../App.css';
+import AddItemForm from "../AddItemForm/AddItemForm";
+import EditableSpan from "../EditableSpan/EditableSpan";
 import {Button} from "@material-ui/core";
 import IconButton from "@material-ui/core/IconButton";
 import {Delete} from "@material-ui/icons";
-import Task from "./Task";
-import {fetchTasksTC} from "./reducers/tasks-reducer";
-import {useDispatch, useSelector} from "react-redux";
-import {FilterValuesType, TaskStatuses, TaskType} from "./api/Todo-list-api";
-import CircularProgress from "@material-ui/core/CircularProgress";
-import {AppRootStateType} from "./reducers/store";
-import {AppReducerStateType} from "./reducers/app-reducer";
+import {FilterValuesType} from "../../api/Todo-list-api";
+import TaskContainer from "../Task/TaskContainer";
 
 
 export type TodoListPropsType = {
     id: string
     title: string;
-    tasks: Array<TaskType>;
     filter: FilterValuesType
     removeTodoList: (todoListID: string) => void
-    removeTask: (taskID: string, todoListID: string) => void;
     changeFilter: (FilterValue: FilterValuesType, todoListID: string) => void;
-    addTask: (title: string, todoListID: string) => void;
-    changeStatus: (taskID: string, status: TaskStatuses, todoListID: string) => void;
-    changeTaskTitle: (taskID: string, title: string, todoListID: string) => void;
     changeTodoListTitle: (title: string, todoListID: string) => void;
+    addTask: (title: string, todoListID: string) => void;
 }
 
 
-const TodoList = React.memo((props: TodoListPropsType) => {
-
-    const {appStatus} = useSelector<AppRootStateType, AppReducerStateType>((state) => state.appAspects)
-    const dispatch = useDispatch()
-
-    useEffect(() => {
-        dispatch(fetchTasksTC(props.id))
-    }, [])
-
-    const removeTask = (taskID: string) => {
-        props.removeTask(taskID, props.id);
-    }
-    const changeStatus = (taskID: string, taskStatus: TaskStatuses) => {
-        props.changeStatus(taskID, taskStatus, props.id);
-    }
-    const changeTitle = (taskID: string, title: string) => {
-        props.changeTaskTitle(taskID, title, props.id)
-    }
+const TodoList: React.FC<TodoListPropsType> = React.memo(props => {
 
     const onAllClickHandler = useCallback(() => {
         props.changeFilter("all", props.id)
     }, [props.id])
+
     const onActiveClickHandler = useCallback(() => {
         props.changeFilter("active", props.id)
     }, [props.id])
+
     const onCompleteClickHandler = useCallback(() => {
         props.changeFilter("completed", props.id)
     }, [props.id])
 
-    const removeTodoList = () => {
+    const removeTodoList = useCallback(() => {
         props.removeTodoList(props.id)
-    }
+    }, [props.id])
+
     const addTask = useCallback((title: string) => {
         props.addTask(title, props.id)
     }, [props.id, props.addTask])
+
     const changeTodoListTitle = useCallback((title: string) => {
         props.changeTodoListTitle(title, props.id)
     }, [props.changeTodoListTitle, props.id])
-
-    let taskForTodoList = props.tasks;
-    if (props.filter === "active") {
-        taskForTodoList = taskForTodoList.filter(t => !t.status)
-    }
-    if (props.filter === "completed") {
-        taskForTodoList = taskForTodoList.filter(t => t.status)
-    }
-
-    const tasks = taskForTodoList.map(taskObj => {
-        return (
-            <Task
-                key={ taskObj.id }
-                task={ taskObj }
-                changeTaskTitle={ changeTitle }
-                changeTaskStatus={ changeStatus }
-                deleteTask={ removeTask }
-            />
-        )
-    });
 
     return <div>
         <div>
             <h3>
                 <EditableSpan
-                title={ props.title }
-                changeItem={ changeTodoListTitle }
+                    title={ props.title }
+                    changeItem={ changeTodoListTitle }
                 />
                 <IconButton onClick={ removeTodoList }>
                     <Delete/>
@@ -101,8 +59,7 @@ const TodoList = React.memo((props: TodoListPropsType) => {
             </h3>
             <AddItemForm addItem={ addTask }/>
             <ul className={ "list-style" }>
-                {appStatus === 'loading' ?
-                    <CircularProgress className="preloader-position" color="secondary"/> : tasks}
+                <TaskContainer todoListID={props.id} filter={props.filter}/>
             </ul>
             <div>
                 <Button
