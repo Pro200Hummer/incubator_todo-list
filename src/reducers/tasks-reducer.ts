@@ -1,6 +1,7 @@
 import {AddTodoListActionType, RemoveTodoListActionType, SetTodoListsActionType} from "./todolist-reducer";
 import {TaskStatuses, TaskType, todoListApi} from "../api/Todo-list-api";
 import {AppRootStateType, AppThunkType} from "./store";
+import {changeAppStatusAC} from "./app-reducer";
 
 const initialState: TaskStateType = {}
 
@@ -55,10 +56,12 @@ export const setTasksAC = (tasks: TaskType[], todoListID: string) =>
 
 /* Thunks */
 export const fetchTasksTC = (todoListID: string): AppThunkType => async dispatch => {
+    dispatch(changeAppStatusAC("loading"))
     try {
         const res = await todoListApi.getTasks(todoListID)
         const tasks = res.data.items
         dispatch(setTasksAC(tasks, todoListID))
+        dispatch(changeAppStatusAC("succeed"))
     } catch (e) {
         throw new Error(e)
     }

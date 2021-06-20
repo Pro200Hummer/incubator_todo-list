@@ -7,8 +7,11 @@ import IconButton from "@material-ui/core/IconButton";
 import {Delete} from "@material-ui/icons";
 import Task from "./Task";
 import {fetchTasksTC} from "./reducers/tasks-reducer";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {FilterValuesType, TaskStatuses, TaskType} from "./api/Todo-list-api";
+import CircularProgress from "@material-ui/core/CircularProgress";
+import {AppRootStateType} from "./reducers/store";
+import {AppReducerStateType} from "./reducers/app-reducer";
 
 
 export type TodoListPropsType = {
@@ -28,6 +31,7 @@ export type TodoListPropsType = {
 
 const TodoList = React.memo((props: TodoListPropsType) => {
 
+    const {appStatus} = useSelector<AppRootStateType, AppReducerStateType>((state) => state.appAspects)
     const dispatch = useDispatch()
 
     useEffect(() => {
@@ -86,16 +90,19 @@ const TodoList = React.memo((props: TodoListPropsType) => {
 
     return <div>
         <div>
-            <h3><EditableSpan
+            <h3>
+                <EditableSpan
                 title={ props.title }
-                changeItem={ changeTodoListTitle }/>
+                changeItem={ changeTodoListTitle }
+                />
                 <IconButton onClick={ removeTodoList }>
                     <Delete/>
                 </IconButton>
             </h3>
             <AddItemForm addItem={ addTask }/>
             <ul className={ "list-style" }>
-                { tasks }
+                {appStatus === 'loading' ?
+                    <CircularProgress className="preloader-position" color="secondary"/> : tasks}
             </ul>
             <div>
                 <Button

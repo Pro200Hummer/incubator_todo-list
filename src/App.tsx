@@ -1,7 +1,6 @@
-import React, {useState} from 'react';
+import React, {useCallback, useEffect} from 'react';
 import './App.css';
 import TodoList from './TodoList';
-import {v1} from "uuid";
 import AddItemForm from "./AddItemForm";
 import {AppBar, Container} from '@material-ui/core';
 import IconButton from "@material-ui/core/IconButton";
@@ -11,138 +10,76 @@ import Toolbar from "@material-ui/core/Toolbar";
 import {Menu} from "@material-ui/icons";
 import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
-import {FilterValuesType, TaskStatuses, TaskType, TodoListDomainType, TodoTaskPriority} from "./api/Todo-list-api";
-import {TaskStateType} from "./reducers/tasks-reducer";
+import LinearProgress from "@material-ui/core/LinearProgress";
 
-function App() {
-    //BLL
-    const todoListID1 = v1();
-    const todoListID2 = v1();
-
-    const [todoLists, setTodoLists] = useState<TodoListDomainType[]>([
-        {id: todoListID1, title: "What to learn", filter: "all", addedDate: "", order: 0},
-        {id: todoListID2, title: "What to buy", filter: "all", addedDate: "", order: 0},
-    ]);
-    const [tasks, setTasks] = useState<TaskStateType>({
-        [todoListID1]: [
-            {
-                id: v1(), title: "HTML & CSS",
-                status: TaskStatuses.Completed,
-                todoListId: todoListID1,
-                order: 0,
-                priority: TodoTaskPriority.Low,
-                startDate: "",
-                deadline: "",
-                addedDate: "",
-                description: ""
-            },
-        ],
-        [todoListID2]: [
-            {
-                id: v1(), title: "Milk",
-                status: TaskStatuses.Completed,
-                todoListId: todoListID2,
-                order: 0,
-                priority: TodoTaskPriority.Low,
-                startDate: "",
-                deadline: "",
-                addedDate: "",
-                description: ""
-            },
-
-        ],
-    });
+import {useDispatch, useSelector} from "react-redux";
+import {AppRootStateType} from "./reducers/store";
+import {
+    changeTodoListFilterAC, changeTodoListTitleTC, createTodoListTC, deleteTodoListTC, fetchTodoListsTC,
+} from "./reducers/todolist-reducer";
+import {
+    addTaskTC, changeTaskStatusTC, changeTaskTitleTC, removeTaskTC, TaskStateType
+} from "./reducers/tasks-reducer";
+import {FilterValuesType, TaskStatuses, TodoListDomainType} from "./api/Todo-list-api";
+import {AppReducerStateType} from "./reducers/app-reducer";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 
-    function changeFilter(filterValue: FilterValuesType, todoListID: string) {
-        const todoList = todoLists.find(tl => tl.id === todoListID)
-        if (todoList) {
-            todoList.filter = filterValue
-            setTodoLists([...todoLists])
-        }
-    }
+const App = () => {
 
-    function addTodoListAC(title: string) {
-        const newTodoListID = v1();
-        const newTodoList: TodoListDomainType = {
-            id: newTodoListID, title: title, filter: "all", order: 0, addedDate: ""
-        }
-        setTodoLists([...todoLists, newTodoList])
-        setTasks({...tasks, [newTodoListID]: []})
-    }
+    const todoLists = useSelector<AppRootStateType, TodoListDomainType[]>((state) => state.todoLists)
+    const tasks = useSelector<AppRootStateType, TaskStateType>((state) => state.tasks)
+    const {
+        appStatus,
+        todoListLoadingStatus,
+    } = useSelector<AppRootStateType, AppReducerStateType>((state) => state.appAspects)
 
-    function changeTodoListTitle(title: string, todoListID: string) {
-        const todoList = todoLists.find(tl => tl.id === todoListID)
-        if (todoList) {
-            todoList.title = title
-            setTodoLists([...todoLists])
-        }
-    }
+    const dispatch = useDispatch()
 
-    function removeTodoList(todoListID: string) {
-        setTodoLists(todoLists.filter(tl => tl.id !== todoListID))
-        delete tasks[todoListID]
-        setTasks({...tasks})
-    }
+    useEffect(() => {
+        dispatch(fetchTodoListsTC())
+    }, [])
 
+    const changeFilter = useCallback((filterValue: FilterValuesType, todoListID: string) => {
+        dispatch(changeTodoListFilterAC(filterValue, todoListID))
+    }, [dispatch])
 
-    function changeStatus(taskID: string, status: TaskStatuses, todoListID: string) {
-        const todoListTasks = tasks[todoListID]
-        const task: TaskType | undefined = todoListTasks.find(t => t.id === taskID)
-        if (task) {
-            task.status = status
-            setTasks({...tasks})
-        }
-    }
+    const addTodoList = useCallback((todoListTitle: string) => {
+        dispatch(createTodoListTC(todoListTitle))
+    }, [dispatch])
 
-    function changeTaskTitle(taskID: string, title: string, todoListID: string) {
-        const todoListTasks = tasks[todoListID]
-        const task: TaskType | undefined = todoListTasks.find(t => t.id === taskID)
-        if (task) {
-            task.title = title
-            setTasks({...tasks})
-        }
-    }
+    const changeTodoListTitle = useCallback((title: string, todoListID: string) => {
+        dispatch(changeTodoListTitleTC(title, todoListID))
+    }, [dispatch])
 
-    function removeTask(taskID: string, todoListID: string) {
-        const todoListTasks = tasks[todoListID]
-        tasks[todoListID] = todoListTasks.filter(task => task.id !== taskID)
-        setTasks({...tasks})
-    }
+    const removeTodoList = useCallback((todoListID: string) => {
+        dispatch(deleteTodoListTC(todoListID))
+    }, [dispatch])
 
-    function addTask(title: string, todoListID: string) {
-        const newTask: TaskType = {
-            id: v1(),
-            title: title,
-            status: TaskStatuses.New,
-            todoListId: todoListID2,
-            order: 0,
-            priority: TodoTaskPriority.Low,
-            startDate: "",
-            deadline: "",
-            addedDate: "",
-            description: ""
-        }
-        const todoListTasks = tasks[todoListID]
-        tasks[todoListID] = [newTask, ...todoListTasks]
-        setTasks({...tasks})
-    }
+    const changeStatus = useCallback((taskID: string, status: TaskStatuses, todoListID: string) => {
+        dispatch(changeTaskStatusTC(todoListID, taskID, status))
+    }, [dispatch])
+
+    const changeTaskTitle = useCallback((taskID: string, taskTitle: string, todoListID: string) => {
+        dispatch(changeTaskTitleTC(todoListID, taskID, taskTitle))
+    }, [dispatch])
+
+    const removeTask = useCallback((taskID: string, todoListID: string) => {
+        dispatch(removeTaskTC(todoListID, taskID))
+    }, [dispatch])
+
+    const addTask = useCallback((title: string, todoListID: string) => {
+        dispatch(addTaskTC(todoListID, title))
+    }, [dispatch])
 
     const content = todoLists.map(tl => {
-        let taskForTodoList = tasks[tl.id]
-        if (tl.filter === "active") {
-            taskForTodoList = tasks[tl.id].filter(t => t.status === TaskStatuses.New)
-        }
-        if (tl.filter === "completed") {
-            taskForTodoList = tasks[tl.id].filter(t => t.status === TaskStatuses.Completed)
-        }
         return (
             <Grid item key={ tl.id }>
                 <Paper elevation={ 10 } style={ {padding: "10px"} }>
                     <TodoList
                         id={ tl.id }
                         title={ tl.title }
-                        tasks={ taskForTodoList }
+                        tasks={ tasks[tl.id] }
                         removeTask={ removeTask }
                         changeFilter={ changeFilter }
                         addTask={ addTask }
@@ -156,10 +93,10 @@ function App() {
             </Grid>
         )
     })
-
     return (
         <div>
             <AppBar position="static">
+                { appStatus === 'loading' && <LinearProgress color="secondary"/> }
                 <Toolbar>
                     <IconButton edge="start" color="inherit" aria-label="menu">
                         <Menu/>
@@ -172,9 +109,11 @@ function App() {
             </AppBar>
             <Container fixed={ true }>
                 <Grid container style={ {margin: "20px 0px"} }>
-                    <AddItemForm addItem={ addTodoListAC }/>
+                    <AddItemForm addItem={ addTodoList }/>
                 </Grid>
-                <Grid container spacing={ 2 }>{ content }</Grid>
+                <Grid container spacing={ 2 }>
+                    { todoListLoadingStatus === 'loading' ? <CircularProgress className="preloader-position"/> : content }
+                </Grid>
             </Container>
         </div>
     )

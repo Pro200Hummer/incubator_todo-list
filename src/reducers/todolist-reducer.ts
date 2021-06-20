@@ -1,5 +1,6 @@
 import {FilterValuesType, todoListApi, TodoListDomainType, TodoListType} from "../api/Todo-list-api";
 import {AppThunkType} from "./store";
+import {changeTodoListLoadingStatusAC} from "./app-reducer";
 
 const initialState: TodoListDomainType[] = [];
 
@@ -43,9 +44,11 @@ export const setTodoListsAC = (todoLists: TodoListType[]) =>
 
 /* Thunks for todolist-reducer */
 export const fetchTodoListsTC = (): AppThunkType => async dispatch => {
+    dispatch(changeTodoListLoadingStatusAC("loading"))
     try {
         const res = await todoListApi.getTodoLists()
         dispatch(setTodoListsAC(res.data))
+        dispatch(changeTodoListLoadingStatusAC("succeed"))
     } catch (e) {
         throw new Error(e)
     }
