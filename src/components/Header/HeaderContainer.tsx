@@ -7,11 +7,11 @@ import {AppReducerStateType} from "../../reducers/app-reducer";
 
 const HeaderContainer = React.memo(() => {
     const {
-        appStatus,
+        status,
     } = useSelector<AppRootStateType, AppReducerStateType>((state) => state.appAspects)
 
     return (
-        <Header appStatus={appStatus}/>
+        <Header status={status}/>
     )
 });
 export default HeaderContainer;

@@ -1,13 +1,13 @@
 import React from 'react';
-import {ErrorSnackbar} from "./components/ErrorSnackbar/ErrorSnackbar";
 import HeaderContainer from "./components/Header/HeaderContainer";
 import TodoListContainer from "./components/TodoList/TodoListContainer";
+import ErrorSnackbarContainer from "./components/ErrorSnackbar/ErroSnackbarContainer";
 
 
 const App = () => {
     return (
         <div>
-            <ErrorSnackbar/>
+            <ErrorSnackbarContainer/>
             <HeaderContainer/>
             <TodoListContainer/>
         </div>

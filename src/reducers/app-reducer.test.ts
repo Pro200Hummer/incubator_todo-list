@@ -1,12 +1,11 @@
-import {appReducer, AppReducerStateType, changeAppStatusAC, changeButtonStatusAC} from "./app-reducer";
+import {appReducer, AppReducerStateType, changeAppStatusAC, setErrorAC} from "./app-reducer";
 
 
 let startState: AppReducerStateType
 beforeEach(() => {
     startState = {
-        appStatus: "loading",
-        todoListLoadingStatus: "loading",
-        buttonDisable: false
+        status: "loading",
+        error: null,
     }
 })
 
@@ -14,11 +13,13 @@ test('loading status should be changed', () => {
     const action = changeAppStatusAC("succeed")
     const endState = appReducer(startState, action)
 
-    expect(endState.appStatus).toBe("succeed")
+    expect(endState.status).toBe("succeed")
 })
-test('button status should be changed', () => {
-    const action = changeButtonStatusAC()
+
+test('the error must be triggered', () => {
+
+    const action = setErrorAC("ERROR")
     const endState = appReducer(startState, action)
 
-    expect(endState.buttonDisable).toBe(true)
+    expect(endState.error).toBe("ERROR")
 })

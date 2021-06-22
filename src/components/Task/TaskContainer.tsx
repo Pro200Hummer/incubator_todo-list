@@ -10,8 +10,6 @@ import {
     TaskStateType
 } from "../../reducers/tasks-reducer";
 import {FilterValuesType, TaskStatuses} from "../../api/Todo-list-api";
-import CircularProgress from "@material-ui/core/CircularProgress";
-import {AppReducerStateType} from "../../reducers/app-reducer";
 
 type TaskContainerPropsType = {
     todoListID: string
@@ -20,7 +18,6 @@ type TaskContainerPropsType = {
 
 const TaskContainer: React.FC<TaskContainerPropsType> = (props) => {
 
-    const {appStatus} = useSelector<AppRootStateType, AppReducerStateType>((state) => state.appAspects)
     const allTasks = useSelector<AppRootStateType, TaskStateType>((state) => state.tasks)
 
     const dispatch = useDispatch()
@@ -63,7 +60,7 @@ const TaskContainer: React.FC<TaskContainerPropsType> = (props) => {
 
     return (
         <>
-            {appStatus === 'loading' ? <CircularProgress className="preloader-position" color="secondary"/> : tasks}
+            { tasks }
         </>
     )
 }

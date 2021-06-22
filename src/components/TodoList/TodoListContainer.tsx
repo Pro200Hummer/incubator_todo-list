@@ -1,12 +1,10 @@
 import React, {useCallback, useEffect} from 'react'
 import {useDispatch, useSelector} from "react-redux";
 import {AppRootStateType} from "../../reducers/store";
-import {FilterValuesType, TodoListDomainType} from "../../api/Todo-list-api";
+import {TodoListDomainType} from "../../api/Todo-list-api";
 import {addTaskTC} from "../../reducers/tasks-reducer";
-import {AppReducerStateType} from "../../reducers/app-reducer";
 import Grid from "@material-ui/core/Grid";
 import AddItemForm from "../AddItemForm/AddItemForm";
-import CircularProgress from "@material-ui/core/CircularProgress";
 import {Container} from "@material-ui/core";
 import Paper from "@material-ui/core/Paper";
 import TodoList from "./TodoList";
@@ -14,18 +12,14 @@ import {
     changeTodoListFilterAC,
     changeTodoListTitleTC,
     createTodoListTC,
-    deleteTodoListTC, fetchTodoListsTC
+    deleteTodoListTC,
+    fetchTodoListsTC
 } from "../../reducers/todolist-reducer";
-
 
 
 const TodoListContainer = React.memo(() => {
 
     const todoLists = useSelector<AppRootStateType, TodoListDomainType[]>((state) => state.todoLists)
-
-    const {
-        todoListLoadingStatus,
-    } = useSelector<AppRootStateType, AppReducerStateType>((state) => state.appAspects)
 
     const dispatch = useDispatch()
 
@@ -33,8 +27,18 @@ const TodoListContainer = React.memo(() => {
         dispatch(fetchTodoListsTC())
     }, [])
 
-    const changeFilter = useCallback((filterValue: FilterValuesType, todoListID: string) => {
-        dispatch(changeTodoListFilterAC(filterValue, todoListID))
+    const changeFilter = useCallback((trigger: string | undefined, todoListID: string) => {
+        switch (trigger) {
+            case "all":
+                return dispatch(changeTodoListFilterAC("all", todoListID))
+            case "active":
+                return dispatch(changeTodoListFilterAC("active", todoListID))
+            case "completed":
+                return dispatch(changeTodoListFilterAC("completed", todoListID))
+            default:
+                return dispatch(changeTodoListFilterAC("all", todoListID))
+        }
+
     }, [dispatch])
 
     const addTodoList = useCallback((todoListTitle: string) => {
@@ -77,7 +81,7 @@ const TodoListContainer = React.memo(() => {
                 <AddItemForm addItem={ addTodoList }/>
             </Grid>
             <Grid container spacing={ 2 }>
-                { todoListLoadingStatus === 'loading' ? <CircularProgress className="preloader-position"/> : content }
+                { content }
             </Grid>
         </Container>
     )

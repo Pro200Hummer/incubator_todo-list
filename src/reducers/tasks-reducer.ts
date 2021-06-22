@@ -1,7 +1,12 @@
-import {AddTodoListActionType, RemoveTodoListActionType, SetTodoListsActionType} from "./todolist-reducer";
+import {
+    addTodoListAC,
+    AddTodoListActionType,
+    RemoveTodoListActionType,
+    SetTodoListsActionType
+} from "./todolist-reducer";
 import {TaskStatuses, TaskType, todoListApi} from "../api/Todo-list-api";
 import {AppRootStateType, AppThunkType} from "./store";
-import {changeAppStatusAC} from "./app-reducer";
+import {changeAppStatusAC, setErrorAC} from "./app-reducer";
 
 const initialState: TaskStateType = {}
 
@@ -68,21 +73,31 @@ export const fetchTasksTC = (todoListID: string): AppThunkType => async dispatch
 
 }
 export const removeTaskTC = (todoListID: string, taskID: string): AppThunkType => async dispatch => {
+    dispatch(changeAppStatusAC("loading"))
     try {
         const res = await todoListApi.deleteTask(todoListID, taskID)
         dispatch(removeTaskAC(todoListID, taskID))
+        dispatch(changeAppStatusAC("succeed"))
     } catch (e) {
         throw new Error(e)
     }
 
 }
 export const addTaskTC = (todoListID: string, taskTitle: string): AppThunkType => async dispatch => {
+    dispatch(changeAppStatusAC("loading"))
     try {
         const res = await todoListApi.createTask(todoListID, taskTitle)
         const task = res.data.data.item
-        dispatch(addTaskAC(task))
+        if(res.data.resultCode === 0){
+            dispatch(addTaskAC(task))
+        }else if(res.data.messages){
+            dispatch(setErrorAC(res.data.messages[0]))
+        }else{
+            dispatch(setErrorAC("Some error occurred"))
+        }
+        dispatch(changeAppStatusAC("succeed"))
     } catch (e) {
-        throw new Error(e)
+
     }
 
 }
