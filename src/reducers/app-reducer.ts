@@ -18,6 +18,7 @@ export const appReducer = (state = initialState, action: AppReducerActionTypes):
 export const changeAppStatusAC = (status: RequestStatusType) => ({type: "APP/SET_STATUS", status} as const);
 export const setErrorAC = (error: string | null) => ({type:"APP/SET_ERROR", error} as const)
 
+
 export type RequestStatusType = 'idle' | 'loading' | 'succeed' | 'failed';
 
 export type AppReducerActionTypes =

@@ -1,4 +1,5 @@
 import axios from "axios";
+import {RequestStatusType} from "../reducers/app-reducer";
 
 /* Instance to requests */
 const instance = axios.create({
@@ -68,7 +69,8 @@ export type TodoListType = {
     order: number
 }
 export type TodoListDomainType = TodoListType & {
-    filter: FilterValuesType
+    filter: FilterValuesType,
+    entityStatus: RequestStatusType,
 }
 
 export type TaskType = {

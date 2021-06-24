@@ -4,10 +4,11 @@ import {TextField} from "@material-ui/core";
 type EditableSpanPropsType = {
     title: string
     changeItem: (title: string) => void
+    disabled?: boolean
 }
 
-const EditableSpan = React.memo((props: EditableSpanPropsType) => {
-    console.log("EditSpan clicked")
+const EditableSpan: React.FC<EditableSpanPropsType> = React.memo(props => {
+
     const [editMode, setEditMode] = useState<boolean>(false);
     const [title, setTitle] = useState<string>(props.title)
 
@@ -20,7 +21,7 @@ const EditableSpan = React.memo((props: EditableSpanPropsType) => {
         props.changeItem(title)
     }
 
-    const changeTitle = (e:ChangeEvent<HTMLInputElement>) => {
+    const changeTitle = (e: ChangeEvent<HTMLInputElement>) => {
         setTitle(e.currentTarget.value)
     }
 
@@ -31,13 +32,14 @@ const EditableSpan = React.memo((props: EditableSpanPropsType) => {
     return (
         editMode ?
             <TextField
-                value={title}
-                autoFocus={true}
-                onBlur={offEditMode}
-                onChange={changeTitle}
-                onKeyPress={onKeyPressEditMode!}
+                value={ title }
+                autoFocus={ true }
+                disabled={props.disabled}
+                onBlur={ offEditMode }
+                onChange={ changeTitle }
+                onKeyPress={ onKeyPressEditMode! }
             /> :
-            <span onDoubleClick={onEditMode}>{props.title}</span>
+            <span onDoubleClick={ onEditMode }>{ props.title }</span>
     );
 })
 

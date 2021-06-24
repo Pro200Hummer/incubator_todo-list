@@ -7,6 +7,7 @@ import {
 import {TaskStatuses, TaskType, todoListApi} from "../api/Todo-list-api";
 import {AppRootStateType, AppThunkType} from "./store";
 import {changeAppStatusAC, setErrorAC} from "./app-reducer";
+import {handleServerAppError, handleServerNetworkError} from "../utils/app-utils";
 
 const initialState: TaskStateType = {}
 
@@ -67,8 +68,8 @@ export const fetchTasksTC = (todoListID: string): AppThunkType => async dispatch
         const tasks = res.data.items
         dispatch(setTasksAC(tasks, todoListID))
         dispatch(changeAppStatusAC("succeed"))
-    } catch (e) {
-        throw new Error(e)
+    } catch (error) {
+        handleServerNetworkError(error.message, dispatch)
     }
 
 }
@@ -78,8 +79,8 @@ export const removeTaskTC = (todoListID: string, taskID: string): AppThunkType =
         const res = await todoListApi.deleteTask(todoListID, taskID)
         dispatch(removeTaskAC(todoListID, taskID))
         dispatch(changeAppStatusAC("succeed"))
-    } catch (e) {
-        throw new Error(e)
+    } catch (error) {
+        handleServerNetworkError(error.message, dispatch)
     }
 
 }
@@ -90,14 +91,11 @@ export const addTaskTC = (todoListID: string, taskTitle: string): AppThunkType =
         const task = res.data.data.item
         if(res.data.resultCode === 0){
             dispatch(addTaskAC(task))
-        }else if(res.data.messages){
-            dispatch(setErrorAC(res.data.messages[0]))
-        }else{
-            dispatch(setErrorAC("Some error occurred"))
+        }else {
+            handleServerAppError(res.data, dispatch)
         }
-        dispatch(changeAppStatusAC("succeed"))
-    } catch (e) {
-
+    } catch (error) {
+        handleServerNetworkError(error.message, dispatch)
     }
 
 }
@@ -121,14 +119,17 @@ export const changeTaskStatusTC = (todoListID: string, taskID: string, status: T
                 .then(() => {
                     dispatch(changeTaskStatusAC(taskID, status, todoListID))
                 })
+                .catch(error => {
+                    handleServerNetworkError(error.message, dispatch)
+                })
         }
     }
 export const changeTaskTitleTC = (todoListID: string, taskID: string, taskTitle: string): AppThunkType => async dispatch => {
         try {
             const res = await todoListApi.updateTask(todoListID, taskID, {title: taskTitle})
             dispatch(changeTaskTitleAC(todoListID, taskID, taskTitle))
-        } catch (e) {
-            throw new Error(e)
+        } catch (error) {
+            handleServerNetworkError(error.message, dispatch)
         }
     }
 

@@ -27,7 +27,7 @@ const TodoListContainer = React.memo(() => {
         dispatch(fetchTodoListsTC())
     }, [])
 
-    const changeFilter = useCallback((trigger: string | undefined, todoListID: string) => {
+    const changeTodoListFilter = useCallback((trigger: string | undefined, todoListID: string) => {
         switch (trigger) {
             case "all":
                 return dispatch(changeTodoListFilterAC("all", todoListID))
@@ -53,20 +53,20 @@ const TodoListContainer = React.memo(() => {
         dispatch(deleteTodoListTC(todoListID))
     }, [dispatch])
 
-    const addTask = useCallback((title: string, todoListID: string) => {
+    const addTaskForTodoList = useCallback((title: string, todoListID: string) => {
         dispatch(addTaskTC(todoListID, title))
     }, [dispatch])
 
     const content = todoLists.map(tl => {
+        const disable = tl.entityStatus === "loading"
         return (
             <Grid item key={ tl.id }>
                 <Paper elevation={ 10 } style={ {padding: "10px"} }>
                     <TodoList
-                        id={ tl.id }
-                        title={ tl.title }
-                        filter={ tl.filter }
-                        changeFilter={ changeFilter }
-                        addTask={ addTask }
+                        todoList={tl}
+                        disable={disable}
+                        changeTodoListFilter={ changeTodoListFilter }
+                        addTaskForTodoList={ addTaskForTodoList }
                         changeTodoListTitle={ changeTodoListTitle }
                         removeTodoList={ removeTodoList }
                     />

@@ -1,75 +1,84 @@
-import React, {useCallback, MouseEvent} from 'react';
+import React, {MouseEvent, useCallback} from 'react';
 import '../../App.css';
 import AddItemForm from "../AddItemForm/AddItemForm";
 import EditableSpan from "../EditableSpan/EditableSpan";
 import {Button} from "@material-ui/core";
 import IconButton from "@material-ui/core/IconButton";
 import {Delete} from "@material-ui/icons";
-import {FilterValuesType} from "../../api/Todo-list-api";
+import {TodoListDomainType} from "../../api/Todo-list-api";
 import TaskContainer from "../Task/TaskContainer";
 
 export type TodoListPropsType = {
-    id: string
-    title: string;
-    filter: FilterValuesType
+    todoList: TodoListDomainType
+    disable: boolean
     removeTodoList: (todoListID: string) => void
-    changeFilter: (trigger: string | undefined, todoListID: string) => void;
+    changeTodoListFilter: (trigger: string | undefined, todoListID: string) => void;
     changeTodoListTitle: (title: string, todoListID: string) => void;
-    addTask: (title: string, todoListID: string) => void;
+    addTaskForTodoList: (title: string, todoListID: string) => void;
 }
 
 
 const TodoList: React.FC<TodoListPropsType> = React.memo(props => {
 
-    const changeFilter = useCallback((e:MouseEvent<HTMLButtonElement>) => {
-        props.changeFilter(e.currentTarget.dataset.filter, props.id)
-    }, [props.id])
+    const {
+        todoList,
+        disable,
+        removeTodoList,
+        changeTodoListFilter,
+        changeTodoListTitle,
+        addTaskForTodoList,
+    } = props
 
-    const removeTodoList = useCallback(() => {
-        props.removeTodoList(props.id)
-    }, [props.id])
+    const changeFilter = useCallback((e: MouseEvent<HTMLButtonElement>) => {
+        changeTodoListFilter(e.currentTarget.dataset.filter, todoList.id)
+    }, [todoList.id])
+
+    const deleteTodoList = useCallback(() => {
+        removeTodoList(todoList.id)
+    }, [todoList.id])
 
     const addTask = useCallback((title: string) => {
-        props.addTask(title, props.id)
-    }, [props.id, props.addTask])
+        addTaskForTodoList(title, todoList.id)
+    }, [todoList.id, addTaskForTodoList])
 
-    const changeTodoListTitle = useCallback((title: string) => {
-        props.changeTodoListTitle(title, props.id)
-    }, [props.changeTodoListTitle, props.id])
+    const changeTitle = useCallback((title: string) => {
+        changeTodoListTitle(title, todoList.id)
+    }, [changeTodoListTitle, todoList.id])
 
     return <div>
         <div>
             <h3>
                 <EditableSpan
-                    title={ props.title }
-                    changeItem={ changeTodoListTitle }
+                    title={ props.todoList.title }
+                    changeItem={ changeTitle }
+                    disabled={disable}
                 />
-                <IconButton onClick={ removeTodoList }>
+                <IconButton onClick={ deleteTodoList } disabled={disable}>
                     <Delete/>
                 </IconButton>
             </h3>
-            <AddItemForm addItem={ addTask }/>
+            <AddItemForm addItem={ addTask } disabled={disable}/>
             <ul className={ "list-style" }>
-                <TaskContainer todoListID={props.id} filter={props.filter}/>
+                <TaskContainer todoListID={ todoList.id } filter={ todoList.filter }/>
             </ul>
             <div>
                 <Button
                     data-filter="all"
-                    color={ props.filter === "all" ? "secondary" : "primary" }
+                    color={ todoList.filter === "all" ? "secondary" : "primary" }
                     variant={ "outlined" }
                     size={ "small" }
                     onClick={ changeFilter }>All
                 </Button>
                 <Button
                     data-filter="active"
-                    color={ props.filter === "active" ? "secondary" : "primary" }
+                    color={ todoList.filter === "active" ? "secondary" : "primary" }
                     variant={ "outlined" }
                     size={ "small" }
                     onClick={ changeFilter }>Active
                 </Button>
                 <Button
                     data-filter="completed"
-                    color={ props.filter === "completed" ? "secondary" : "primary" }
+                    color={ todoList.filter === "completed" ? "secondary" : "primary" }
                     variant={ "outlined" }
                     size={ "small" }
                     onClick={ changeFilter }>Completed
