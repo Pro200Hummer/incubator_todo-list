@@ -1,4 +1,4 @@
-import {TaskStatuses, TodoTaskPriority} from "../api/Todo-list-api";
+import {TaskStatuses, TodoTaskPriority} from "../../../api/Todo-list-api";
 import {
     addTaskAC,
     changeTaskStatusAC,
@@ -7,7 +7,7 @@ import {
     tasksReducer,
     TaskStateType
 } from "./tasks-reducer";
-import {addTodoListAC, removeTodoListAC} from "./todolist-reducer";
+import {addTodoListAC, removeTodoListAC} from "../todolist-reducer";
 
 const restTaskParams = {
     order: 0,

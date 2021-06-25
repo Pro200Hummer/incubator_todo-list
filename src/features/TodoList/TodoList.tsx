@@ -1,12 +1,12 @@
 import React, {MouseEvent, useCallback} from 'react';
-import '../../App.css';
-import AddItemForm from "../AddItemForm/AddItemForm";
-import EditableSpan from "../EditableSpan/EditableSpan";
+import '../../app/App.css';
+import AddItemForm from "../../components/AddItemForm/AddItemForm";
+import EditableSpan from "../../components/EditableSpan/EditableSpan";
 import {Button} from "@material-ui/core";
 import IconButton from "@material-ui/core/IconButton";
 import {Delete} from "@material-ui/icons";
 import {TodoListDomainType} from "../../api/Todo-list-api";
-import TaskContainer from "../Task/TaskContainer";
+import TaskContainer from "./Task/TaskContainer";
 
 export type TodoListPropsType = {
     todoList: TodoListDomainType

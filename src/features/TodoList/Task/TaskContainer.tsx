@@ -1,15 +1,15 @@
 import React, {useCallback, useEffect} from "react";
 import Task from "./Task";
 import {useDispatch, useSelector} from "react-redux";
-import {AppRootStateType} from "../../reducers/store";
+import {AppRootStateType} from "../../../app/store";
 import {
     changeTaskStatusTC,
     changeTaskTitleTC,
     fetchTasksTC,
     removeTaskTC,
     TaskStateType
-} from "../../reducers/tasks-reducer";
-import {FilterValuesType, TaskStatuses} from "../../api/Todo-list-api";
+} from "./tasks-reducer";
+import {FilterValuesType, TaskStatuses} from "../../../api/Todo-list-api";
 
 type TaskContainerPropsType = {
     todoListID: string

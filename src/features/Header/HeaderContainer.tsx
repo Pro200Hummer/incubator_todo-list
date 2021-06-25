@@ -1,8 +1,8 @@
 import React from "react";
 import Header from "./Header";
 import {useSelector} from "react-redux";
-import {AppRootStateType} from "../../reducers/store";
-import {AppReducerStateType} from "../../reducers/app-reducer";
+import {AppRootStateType} from "../../app/store";
+import {AppReducerStateType} from "../../app/app-reducer";
 
 
 const HeaderContainer = React.memo(() => {

@@ -1,10 +1,10 @@
 import React, {useCallback, useEffect} from 'react'
 import {useDispatch, useSelector} from "react-redux";
-import {AppRootStateType} from "../../reducers/store";
+import {AppRootStateType} from "../../app/store";
 import {TodoListDomainType} from "../../api/Todo-list-api";
-import {addTaskTC} from "../../reducers/tasks-reducer";
+import {addTaskTC} from "./Task/tasks-reducer";
 import Grid from "@material-ui/core/Grid";
-import AddItemForm from "../AddItemForm/AddItemForm";
+import AddItemForm from "../../components/AddItemForm/AddItemForm";
 import {Container} from "@material-ui/core";
 import Paper from "@material-ui/core/Paper";
 import TodoList from "./TodoList";
@@ -14,7 +14,7 @@ import {
     createTodoListTC,
     deleteTodoListTC,
     fetchTodoListsTC
-} from "../../reducers/todolist-reducer";
+} from "./todolist-reducer";
 
 
 const TodoListContainer = React.memo(() => {

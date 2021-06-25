@@ -1,4 +1,4 @@
-import {changeAppStatusAC, setErrorAC} from "../reducers/app-reducer";
+import {changeAppStatusAC, setErrorAC} from "../app/app-reducer";
 import {ResponseType} from '../api/Todo-list-api'
 import {Dispatch} from "redux";
 

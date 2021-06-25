@@ -1,8 +1,8 @@
 import React, {useCallback} from "react";
 import {ErrorSnackbar} from "./ErrorSnackbar";
 import {useDispatch, useSelector} from "react-redux";
-import {AppRootStateType} from "../../reducers/store";
-import {setErrorAC} from "../../reducers/app-reducer";
+import {AppRootStateType} from "../../app/store";
+import {setErrorAC} from "../../app/app-reducer";
 
 
 const ErrorSnackbarContainer: React.FC = React.memo(() => {

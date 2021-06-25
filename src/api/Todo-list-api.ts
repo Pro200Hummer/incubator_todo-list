@@ -1,5 +1,5 @@
 import axios from "axios";
-import {RequestStatusType} from "../reducers/app-reducer";
+import {RequestStatusType} from "../app/app-reducer";
 
 /* Instance to requests */
 const instance = axios.create({

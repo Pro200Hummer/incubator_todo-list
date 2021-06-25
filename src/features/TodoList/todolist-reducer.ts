@@ -1,7 +1,7 @@
-import {FilterValuesType, todoListApi, TodoListDomainType, TodoListType} from "../api/Todo-list-api";
-import {AppThunkType} from "./store";
-import {changeAppStatusAC, RequestStatusType, setErrorAC} from "./app-reducer";
-import {handleServerAppError, handleServerNetworkError} from "../utils/app-utils";
+import {FilterValuesType, todoListApi, TodoListDomainType, TodoListType} from "../../api/Todo-list-api";
+import {AppThunkType} from "../../app/store";
+import {changeAppStatusAC, RequestStatusType, setErrorAC} from "../../app/app-reducer";
+import {handleServerAppError, handleServerNetworkError} from "../../utils/app-utils";
 
 const initialState: TodoListDomainType[] = [];
 
