@@ -4,7 +4,7 @@ import {handleServerAppError, handleServerNetworkError} from "../../utils/app-ut
 import {changeAppStatusAC} from "../../app/app-reducer";
 
 const initialState = {
-    isLoggedIn: false
+    isLoggedIn: false as boolean
 }
 
 /* Reducer */
@@ -29,6 +29,23 @@ export const setIsLoggedInTC = (data: LoginParamsType): AppThunkType => async di
             .then(res => {
                 if (res.data.resultCode === 0) {
                     dispatch(setIsLoggedInAC(true))
+                } else {
+                    handleServerAppError(res.data, dispatch)
+                }
+            })
+    } catch (error) {
+        handleServerNetworkError(error.message, dispatch)
+    }
+    dispatch(changeAppStatusAC("succeed"))
+}
+
+export const removeLoginTC = (): AppThunkType => async dispatch => {
+    dispatch(changeAppStatusAC("loading"))
+    try {
+        authApi.logout()
+            .then(res => {
+                if (res.data.resultCode === 0) {
+                    dispatch(setIsLoggedInAC(false))
                 } else {
                     handleServerAppError(res.data, dispatch)
                 }

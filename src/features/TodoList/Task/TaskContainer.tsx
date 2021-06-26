@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect} from "react";
-import Task from "./Task";
+import {Task} from "./Task";
 import {useDispatch, useSelector} from "react-redux";
 import {AppRootStateType} from "../../../app/store";
 import {
@@ -17,7 +17,7 @@ type TaskContainerPropsType = {
 }
 
 const TaskContainer: React.FC<TaskContainerPropsType> = (props) => {
-
+    console.log("task container")
     const allTasks = useSelector<AppRootStateType, TaskStateType>((state) => state.tasks)
 
     const dispatch = useDispatch()

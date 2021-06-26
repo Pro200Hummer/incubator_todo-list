@@ -7,7 +7,7 @@ beforeEach(() => {
     }
 })
 
-test('loading status should be changed', () => {
+test('login status should be changed', () => {
     const action = setIsLoggedInAC(true)
     const endState = authReducer(startState, action)
 

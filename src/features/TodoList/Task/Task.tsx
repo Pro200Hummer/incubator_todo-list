@@ -13,7 +13,8 @@ export type TaskPropsType = {
     deleteTask: (taskID: string) => void;
 }
 
-const Task: React.FC<TaskPropsType> = React.memo(props => {
+export const Task: React.FC<TaskPropsType> = React.memo(props => {
+    console.log("task")
     const {
         task,
         deleteTask,
@@ -49,6 +50,4 @@ const Task: React.FC<TaskPropsType> = React.memo(props => {
 
         </li>
     )
-})
-
-export default Task
+});

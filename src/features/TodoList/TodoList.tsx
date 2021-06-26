@@ -19,7 +19,7 @@ export type TodoListPropsType = {
 
 
 const TodoList: React.FC<TodoListPropsType> = React.memo(props => {
-
+    console.log("todolist")
     const {
         todoList,
         disable,

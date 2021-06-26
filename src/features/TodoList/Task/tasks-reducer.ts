@@ -93,6 +93,7 @@ export const addTaskTC = (todoListID: string, taskTitle: string): AppThunkType =
         }else {
             handleServerAppError(res.data, dispatch)
         }
+        dispatch(changeAppStatusAC("succeed"))
     } catch (error) {
         handleServerNetworkError(error.message, dispatch)
     }

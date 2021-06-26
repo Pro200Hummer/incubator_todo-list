@@ -7,7 +7,7 @@ import {setErrorAC} from "../../app/app-reducer";
 
 const ErrorSnackbarContainer: React.FC = React.memo(() => {
 
-    const error = useSelector<AppRootStateType, string | null>((state) => state.appAspects.error)
+    const error = useSelector<AppRootStateType, string | null>((state) => state.app.error)
     const dispatch = useDispatch()
     const isOpen = error !== null
 

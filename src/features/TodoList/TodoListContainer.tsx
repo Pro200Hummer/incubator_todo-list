@@ -18,7 +18,7 @@ import { Redirect } from 'react-router-dom';
 
 
 const TodoListContainer = React.memo(() => {
-
+    console.log("todo list container")
     const todoLists = useSelector<AppRootStateType, TodoListDomainType[]>((state) => state.todoLists)
     const isLoggedIn = useSelector<AppRootStateType, boolean>((state) => state.auth.isLoggedIn)
 

@@ -10,11 +10,17 @@ import {RequestStatusType} from "../../app/app-reducer";
 
 type HeaderPropsType = {
     status: RequestStatusType
+    isLoggedIn: boolean
+    logoutClickHandler: () => void
 }
 
 const Header: React.FC<HeaderPropsType> = React.memo(props => {
 
-    const {status} = props
+    const {
+        status,
+        isLoggedIn,
+        logoutClickHandler
+    } = props
 
     return (
         <>
@@ -27,6 +33,7 @@ const Header: React.FC<HeaderPropsType> = React.memo(props => {
                     <Typography variant="h6">
                         News
                     </Typography>
+                    { isLoggedIn && <Button color="inherit" onClick={logoutClickHandler}>Log out</Button> }
                     <Button color="inherit">Login</Button>
                 </Toolbar>
             </AppBar>
