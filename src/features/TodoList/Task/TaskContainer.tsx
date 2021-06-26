@@ -7,9 +7,9 @@ import {
     changeTaskTitleTC,
     fetchTasksTC,
     removeTaskTC,
-    TaskStateType
+    TaskStateType, TaskStatuses
 } from "./tasks-reducer";
-import {FilterValuesType, TaskStatuses} from "../../../api/Todo-list-api";
+import {FilterValuesType} from "../todolist-reducer";
 
 type TaskContainerPropsType = {
     todoListID: string

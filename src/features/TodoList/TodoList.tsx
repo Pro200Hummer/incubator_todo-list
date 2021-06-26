@@ -5,8 +5,8 @@ import EditableSpan from "../../components/EditableSpan/EditableSpan";
 import {Button} from "@material-ui/core";
 import IconButton from "@material-ui/core/IconButton";
 import {Delete} from "@material-ui/icons";
-import {TodoListDomainType} from "../../api/Todo-list-api";
 import TaskContainer from "./Task/TaskContainer";
+import {TodoListDomainType} from "./todolist-reducer";
 
 export type TodoListPropsType = {
     todoList: TodoListDomainType

@@ -5,7 +5,7 @@ import {Routes} from "../features/Routes";
 import {BrowserRouter} from "react-router-dom";
 
 
-const App = () => {
+const App: React.FC = () => {
     return (
         <div>
             <BrowserRouter>

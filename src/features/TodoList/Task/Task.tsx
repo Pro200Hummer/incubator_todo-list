@@ -3,7 +3,7 @@ import {Checkbox} from '@material-ui/core';
 import EditableSpan from '../../../components/EditableSpan/EditableSpan';
 import IconButton from '@material-ui/core/IconButton';
 import {Delete} from '@material-ui/icons';
-import {TaskStatuses, TaskType} from '../../../api/Todo-list-api';
+import {TaskStatuses, TaskType} from "./tasks-reducer";
 
 
 export type TaskPropsType = {

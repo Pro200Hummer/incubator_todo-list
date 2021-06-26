@@ -1,29 +1,30 @@
 import React from 'react'
 import {Checkbox, FormControl, FormControlLabel, FormGroup, FormLabel, TextField, Button, Grid} from '@material-ui/core'
 import {useFormik} from "formik";
+import {LoginParamsType} from "../../api/auth-api";
 
-
-export type LoginParamsType = {
-    email?: string
-    password?: string
-    rememberMe?: boolean
+type LoginPropsType = {
+    loginHandler: (loginData: LoginParamsType) => void
 }
 
-export const Login = () => {
+export const Login: React.FC<LoginPropsType> = React.memo(props => {
+
+    const {
+        loginHandler,
+    } = props
 
     const validate = (values: LoginParamsType) => {
         const errors: LoginParamsType = {};
         if (!values.email) {
-            errors.email = 'Required';
+            errors.email = 'Enter your email';
         } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
             errors.email = 'Invalid email address';
         }
         if (!values.password) {
-            errors.password = 'Required';
+            errors.password = 'Enter password';
         } else if (values.password.length <= 2) {
             errors.password = 'Password must be more then 2 characters';
         }
-
         return errors;
     };
 
@@ -35,7 +36,7 @@ export const Login = () => {
         },
         validate,
         onSubmit: values => {
-            alert(JSON.stringify(values, null, 2));
+            loginHandler(values)
         },
     });
 
@@ -87,4 +88,4 @@ export const Login = () => {
             </Grid>
         </Grid>
     )
-}
+})

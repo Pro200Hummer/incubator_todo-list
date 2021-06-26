@@ -1,12 +1,11 @@
 import {
-    addTodoListAC,
     AddTodoListActionType,
     RemoveTodoListActionType,
     SetTodoListsActionType
 } from "../todolist-reducer";
-import {TaskStatuses, TaskType, todoListApi} from "../../../api/Todo-list-api";
+import {todoListApi} from "../../../api/todo-list-api";
 import {AppRootStateType, AppThunkType} from "../../../app/store";
-import {changeAppStatusAC, setErrorAC} from "../../../app/app-reducer";
+import {changeAppStatusAC} from "../../../app/app-reducer";
 import {handleServerAppError, handleServerNetworkError} from "../../../utils/app-utils";
 
 const initialState: TaskStateType = {}
@@ -137,6 +136,34 @@ export const changeTaskTitleTC = (todoListID: string, taskID: string, taskTitle:
 export type TaskStateType = {
     [key: string]: TaskType[]
 };
+
+export type TaskType = {
+    id: string,
+    title: string,
+    description: null | string,
+    todoListId: string,
+    order: number,
+    status: TaskStatuses,
+    priority: TodoTaskPriority,
+    startDate: string,
+    deadline: string,
+    addedDate: string
+}
+
+export enum TaskStatuses {
+    New = 0,
+    InProgress = 1,
+    Completed = 2,
+    Draft = 3
+}
+
+export enum TodoTaskPriority {
+    Low = 0,
+    Middle = 1,
+    Hi = 2,
+    Urgently = 3,
+    Later = 4
+}
 
 export type TasksActionType =
     | ReturnType<typeof addTaskAC>

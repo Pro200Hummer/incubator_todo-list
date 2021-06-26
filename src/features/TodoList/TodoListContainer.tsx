@@ -1,7 +1,6 @@
 import React, {useCallback, useEffect} from 'react'
 import {useDispatch, useSelector} from "react-redux";
 import {AppRootStateType} from "../../app/store";
-import {TodoListDomainType} from "../../api/Todo-list-api";
 import {addTaskTC} from "./Task/tasks-reducer";
 import Grid from "@material-ui/core/Grid";
 import AddItemForm from "../../components/AddItemForm/AddItemForm";
@@ -13,17 +12,22 @@ import {
     changeTodoListTitleTC,
     createTodoListTC,
     deleteTodoListTC,
-    fetchTodoListsTC
+    fetchTodoListsTC, TodoListDomainType
 } from "./todolist-reducer";
+import { Redirect } from 'react-router-dom';
 
 
 const TodoListContainer = React.memo(() => {
 
     const todoLists = useSelector<AppRootStateType, TodoListDomainType[]>((state) => state.todoLists)
+    const isLoggedIn = useSelector<AppRootStateType, boolean>((state) => state.auth.isLoggedIn)
 
     const dispatch = useDispatch()
 
     useEffect(() => {
+        if(!isLoggedIn){
+            return
+        }
         dispatch(fetchTodoListsTC())
     }, [])
 
@@ -74,6 +78,10 @@ const TodoListContainer = React.memo(() => {
             </Grid>
         )
     })
+
+    if(!isLoggedIn){
+        return <Redirect to={'/login'}/>
+    }
 
     return (
         <Container fixed={ true }>

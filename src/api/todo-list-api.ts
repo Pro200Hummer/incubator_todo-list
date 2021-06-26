@@ -1,8 +1,9 @@
 import axios from "axios";
-import {RequestStatusType} from "../app/app-reducer";
+import {TaskStatuses, TaskType, TodoTaskPriority} from "../features/TodoList/Task/tasks-reducer";
+import {TodoListType} from "../features/TodoList/todolist-reducer";
 
 /* Instance to requests */
-const instance = axios.create({
+export const instance = axios.create({
     baseURL: `https://social-network.samuraijs.com/api/1.1/`,
     withCredentials: true,
     headers: {
@@ -46,45 +47,6 @@ export const todoListApi = {
 }
 
 /* Types */
-export enum TaskStatuses {
-    New = 0,
-    InProgress = 1,
-    Completed = 2,
-    Draft = 3
-}
-
-export enum TodoTaskPriority {
-    Low = 0,
-    Middle = 1,
-    Hi = 2,
-    Urgently = 3,
-    Later = 4
-}
-export type FilterValuesType = "all" | "active" | "completed";
-
-export type TodoListType = {
-    id: string,
-    title: string,
-    addedDate: string,
-    order: number
-}
-export type TodoListDomainType = TodoListType & {
-    filter: FilterValuesType,
-    entityStatus: RequestStatusType,
-}
-
-export type TaskType = {
-    id: string,
-    title: string,
-    description: null | string,
-    todoListId: string,
-    order: number,
-    status: TaskStatuses,
-    priority: TodoTaskPriority,
-    startDate: string,
-    deadline: string,
-    addedDate: string
-}
 
 export type TaskAPIType = {
     items: TaskType[]

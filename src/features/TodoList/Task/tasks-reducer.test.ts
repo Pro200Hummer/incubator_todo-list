@@ -1,4 +1,4 @@
-import {TaskStatuses, TodoTaskPriority} from "../../../api/Todo-list-api";
+import {TaskStatuses, TodoTaskPriority} from "../../../api/todo-list-api";
 import {
     addTaskAC,
     changeTaskStatusAC,

@@ -1,4 +1,4 @@
-import {FilterValuesType, todoListApi, TodoListDomainType, TodoListType} from "../../api/Todo-list-api";
+import {todoListApi} from "../../api/todo-list-api";
 import {AppThunkType} from "../../app/store";
 import {changeAppStatusAC, RequestStatusType, setErrorAC} from "../../app/app-reducer";
 import {handleServerAppError, handleServerNetworkError} from "../../utils/app-utils";
@@ -54,10 +54,10 @@ export const fetchTodoListsTC = (): AppThunkType => async dispatch => {
     try {
         const res = await todoListApi.getTodoLists()
         dispatch(setTodoListsAC(res.data))
-        dispatch(changeAppStatusAC("succeed"))
     } catch (error) {
         handleServerNetworkError(error.message, dispatch)
     }
+    dispatch(changeAppStatusAC("succeed"))
 }
 export const deleteTodoListTC = (todoListID: string): AppThunkType => async dispatch => {
     dispatch(changeAppStatusAC("loading"))
@@ -96,6 +96,21 @@ export const changeTodoListTitleTC = (todoListTitle: string, todoListID: string)
     }
 }
 /* Types */
+
+export type TodoListDomainType = TodoListType & {
+    filter: FilterValuesType,
+    entityStatus: RequestStatusType,
+}
+
+export type FilterValuesType = "all" | "active" | "completed";
+
+export type TodoListType = {
+    id: string,
+    title: string,
+    addedDate: string,
+    order: number
+}
+
 export type RemoveTodoListActionType = ReturnType<typeof removeTodoListAC>
 export type AddTodoListActionType = ReturnType<typeof addTodoListAC>
 export type SetTodoListsActionType = ReturnType<typeof setTodoListsAC>
