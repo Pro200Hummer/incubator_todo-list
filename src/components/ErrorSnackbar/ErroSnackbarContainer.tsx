@@ -2,7 +2,7 @@ import React, {useCallback} from "react";
 import {ErrorSnackbar} from "./ErrorSnackbar";
 import {useDispatch, useSelector} from "react-redux";
 import {AppRootStateType} from "../../app/store";
-import {setErrorAC} from "../../app/app-reducer";
+import {setError} from "../../app/app-reducer";
 
 
 const ErrorSnackbarContainer: React.FC = React.memo(() => {
@@ -12,7 +12,7 @@ const ErrorSnackbarContainer: React.FC = React.memo(() => {
     const isOpen = error !== null
 
     const zeroingError = useCallback(() => {
-        dispatch(setErrorAC(null))
+        dispatch(setError(null))
     },[dispatch])
 
     return (

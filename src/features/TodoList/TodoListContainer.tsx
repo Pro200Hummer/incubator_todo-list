@@ -12,7 +12,7 @@ import {
     changeTodoListTitleTC,
     createTodoListTC,
     deleteTodoListTC,
-    fetchTodoListsTC, TodoListDomainType
+    fetchTodoLists, TodoListDomainType
 } from "./todolist-reducer";
 import { Redirect } from 'react-router-dom';
 
@@ -28,7 +28,7 @@ const TodoListContainer = React.memo(() => {
         if(!isLoggedIn){
             return
         }
-        dispatch(fetchTodoListsTC())
+        dispatch(fetchTodoLists())
     }, [])
 
     const changeTodoListFilter = useCallback((trigger: string | undefined, todoListID: string) => {

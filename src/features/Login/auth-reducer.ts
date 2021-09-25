@@ -1,13 +1,18 @@
 import {AppThunkType} from "../../app/store";
 import {authApi, LoginParamsType} from "../../api/auth-api";
 import {handleServerAppError, handleServerNetworkError} from "../../utils/app-utils";
-import {changeAppStatusAC} from "../../app/app-reducer";
+import {changeAppStatus} from "../../app/app-reducer";
 
+export type AuthReducerStateType = typeof initialState
+
+export type AuthReducerActionsType =
+    |ReturnType<typeof setIsLoggedInAC>
 const initialState = {
     isLoggedIn: false as boolean
 }
 
-/* Reducer */
+export const setIsLoggedInAC = (loginStatus: boolean) => ({type: "AUTH/SET_IS_LOGGED_IN", loginStatus} as const)
+
 export const authReducer = (state = initialState, action: AuthReducerActionsType): AuthReducerStateType => {
     switch (action.type) {
         case "AUTH/SET_IS_LOGGED_IN":
@@ -17,13 +22,8 @@ export const authReducer = (state = initialState, action: AuthReducerActionsType
     }
 }
 
-
-/* Action Creators */
-export const setIsLoggedInAC = (loginStatus: boolean) => ({type: "AUTH/SET_IS_LOGGED_IN", loginStatus} as const)
-
-/* Thunks */
 export const setIsLoggedInTC = (data: LoginParamsType): AppThunkType => async dispatch => {
-    dispatch(changeAppStatusAC("loading"))
+    dispatch(changeAppStatus("loading"))
     try {
         authApi.login(data)
             .then(res => {
@@ -36,11 +36,11 @@ export const setIsLoggedInTC = (data: LoginParamsType): AppThunkType => async di
     } catch (error) {
         handleServerNetworkError(error.message, dispatch)
     }
-    dispatch(changeAppStatusAC("succeed"))
+    dispatch(changeAppStatus("succeed"))
 }
 
 export const removeLoginTC = (): AppThunkType => async dispatch => {
-    dispatch(changeAppStatusAC("loading"))
+    dispatch(changeAppStatus("loading"))
     try {
         authApi.logout()
             .then(res => {
@@ -53,12 +53,5 @@ export const removeLoginTC = (): AppThunkType => async dispatch => {
     } catch (error) {
         handleServerNetworkError(error.message, dispatch)
     }
-    dispatch(changeAppStatusAC("succeed"))
+    dispatch(changeAppStatus("succeed"))
 }
-
-/* Types */
-
-export type AuthReducerStateType = typeof initialState
-
-export type AuthReducerActionsType =
-    |ReturnType<typeof setIsLoggedInAC>

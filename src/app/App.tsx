@@ -4,7 +4,7 @@ import ErrorSnackbarContainer from "../components/ErrorSnackbar/ErroSnackbarCont
 import {Routes} from "../features/Routes";
 import {useDispatch, useSelector} from "react-redux";
 import {AppRootStateType} from "./store";
-import {initializedAppAC} from "./app-reducer";
+import {initializedApp} from "./app-reducer";
 import {CircularProgress} from "@material-ui/core";
 
 export const App: React.FC = () => {
@@ -13,7 +13,7 @@ export const App: React.FC = () => {
     const dispatch = useDispatch()
 
     useEffect(() => {
-        dispatch(initializedAppAC())
+        dispatch(initializedApp())
     }, [])
 
     if (!isInitialized) {

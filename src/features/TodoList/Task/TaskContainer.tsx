@@ -5,7 +5,7 @@ import {AppRootStateType} from "../../../app/store";
 import {
     changeTaskStatusTC,
     changeTaskTitleTC,
-    fetchTasksTC,
+    fetchTasks,
     removeTaskTC,
     TaskStateType, TaskStatuses
 } from "./tasks-reducer";
@@ -23,7 +23,7 @@ const TaskContainer: React.FC<TaskContainerPropsType> = (props) => {
     const dispatch = useDispatch()
 
     useEffect(() => {
-        dispatch(fetchTasksTC(props.todoListID))
+        dispatch(fetchTasks(props.todoListID))
     }, [])
 
     let taskForTodoList = allTasks[props.todoListID];

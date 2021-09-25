@@ -3,11 +3,27 @@ import {authApi} from "../api/auth-api";
 import {handleServerAppError, handleServerNetworkError} from "../utils/app-utils";
 import {setIsLoggedInAC} from "../features/Login/auth-reducer";
 
+export type RequestStatusType = 'idle' | 'loading' | 'succeed' | 'failed';
+
+export type AppReducerActionTypes =
+    | ReturnType<typeof changeAppStatus>
+    | ReturnType<typeof setError>
+    | ReturnType<typeof setIsInitialized>
+
+export type AppReducerStateType = typeof initialState;
+
 const initialState = {
     status: 'idle' as RequestStatusType,
     error: null as string | null,
     isInitialized: false as boolean
 };
+
+export const changeAppStatus = (status: RequestStatusType) => ({type: "APP/SET_STATUS", status} as const);
+export const setError = (error: string | null) => ({type: "APP/SET_ERROR", error} as const)
+export const setIsInitialized = (initializedStatus: boolean) => ({
+    type: "APP/SET_INITIALIZED",
+    initializedStatus
+} as const)
 
 export const appReducer = (state = initialState, action: AppReducerActionTypes): AppReducerStateType => {
     switch (action.type) {
@@ -22,15 +38,7 @@ export const appReducer = (state = initialState, action: AppReducerActionTypes):
     }
 };
 
-
-export const changeAppStatusAC = (status: RequestStatusType) => ({type: "APP/SET_STATUS", status} as const);
-export const setErrorAC = (error: string | null) => ({type: "APP/SET_ERROR", error} as const)
-export const setIsInitializedAC = (initializedStatus: boolean) => ({
-    type: "APP/SET_INITIALIZED",
-    initializedStatus
-} as const)
-
-export const initializedAppAC = (): AppThunkType => async dispatch => {
+export const initializedApp = (): AppThunkType => async dispatch => {
     try {
         authApi.me()
             .then(res => {
@@ -39,18 +47,13 @@ export const initializedAppAC = (): AppThunkType => async dispatch => {
                 }else{
                     handleServerAppError(res.data, dispatch)
                 }
-                dispatch(setIsInitializedAC(true))
+                dispatch(setIsInitialized(true))
             })
     } catch (error) {
         handleServerNetworkError(error.message, dispatch)
     }
 }
 
-export type RequestStatusType = 'idle' | 'loading' | 'succeed' | 'failed';
 
-export type AppReducerActionTypes =
-    | ReturnType<typeof changeAppStatusAC>
-    | ReturnType<typeof setErrorAC>
-    | ReturnType<typeof setIsInitializedAC>
 
-export type AppReducerStateType = typeof initialState;
+

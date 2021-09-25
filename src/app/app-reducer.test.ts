@@ -1,4 +1,4 @@
-import {appReducer, AppReducerStateType, changeAppStatusAC, setErrorAC, setIsInitializedAC} from "./app-reducer";
+import {appReducer, AppReducerStateType, changeAppStatus, setError, setIsInitialized} from "./app-reducer";
 
 
 let startState: AppReducerStateType
@@ -11,7 +11,7 @@ beforeEach(() => {
 })
 
 test('loading status should be changed', () => {
-    const action = changeAppStatusAC("succeed")
+    const action = changeAppStatus("succeed")
     const endState = appReducer(startState, action)
 
     expect(endState.status).toBe("succeed")
@@ -19,7 +19,7 @@ test('loading status should be changed', () => {
 
 test('the error must be triggered', () => {
 
-    const action = setErrorAC("ERROR")
+    const action = setError("ERROR")
     const endState = appReducer(startState, action)
 
     expect(endState.error).toBe("ERROR")
@@ -27,7 +27,7 @@ test('the error must be triggered', () => {
 
 test('initialized status should be changed', () => {
 
-    const action = setIsInitializedAC(true)
+    const action = setIsInitialized(true)
     const endState = appReducer(startState, action)
 
     expect(endState.isInitialized).toBeTruthy()
