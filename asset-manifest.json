@@ -1,0 +1,22 @@
+{
+  "files": {
+    "main.css": "/incubator_todo-list/static/css/main.3d4f5727.chunk.css",
+    "main.js": "/incubator_todo-list/static/js/main.a11d04d8.chunk.js",
+    "main.js.map": "/incubator_todo-list/static/js/main.a11d04d8.chunk.js.map",
+    "runtime-main.js": "/incubator_todo-list/static/js/runtime-main.ab1dcb6e.js",
+    "runtime-main.js.map": "/incubator_todo-list/static/js/runtime-main.ab1dcb6e.js.map",
+    "static/js/2.740e7e3e.chunk.js": "/incubator_todo-list/static/js/2.740e7e3e.chunk.js",
+    "static/js/2.740e7e3e.chunk.js.map": "/incubator_todo-list/static/js/2.740e7e3e.chunk.js.map",
+    "index.html": "/incubator_todo-list/index.html",
+    "precache-manifest.dc9a10c7dc8227431fc6985a55c6d8b3.js": "/incubator_todo-list/precache-manifest.dc9a10c7dc8227431fc6985a55c6d8b3.js",
+    "service-worker.js": "/incubator_todo-list/service-worker.js",
+    "static/css/main.3d4f5727.chunk.css.map": "/incubator_todo-list/static/css/main.3d4f5727.chunk.css.map",
+    "static/js/2.740e7e3e.chunk.js.LICENSE.txt": "/incubator_todo-list/static/js/2.740e7e3e.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.ab1dcb6e.js",
+    "static/js/2.740e7e3e.chunk.js",
+    "static/css/main.3d4f5727.chunk.css",
+    "static/js/main.a11d04d8.chunk.js"
+  ]
+}
