@@ -1,26 +1,26 @@
 import React, {useCallback, useEffect} from 'react'
-import {useDispatch, useSelector} from "react-redux";
-import {AppRootStateType} from "../../app/store";
-import {addTaskTC} from "./Task/tasks-reducer";
+import {useDispatch} from "react-redux";
 import Grid from "@material-ui/core/Grid";
 import AddItemForm from "../../components/AddItemForm/AddItemForm";
 import {Container} from "@material-ui/core";
 import Paper from "@material-ui/core/Paper";
 import TodoList from "./TodoList";
+import { Redirect } from 'react-router-dom';
+import {useAppSelector} from "../../app/hooks";
 import {
     changeTodoListFilterAC,
-    changeTodoListTitleTC,
-    createTodoListTC,
-    deleteTodoListTC,
-    fetchTodoLists, TodoListDomainType
+    changeTodoListTitle,
+    createTodoList,
+    deleteTodoList,
+    fetchTodoLists
 } from "./todolist-reducer";
-import { Redirect } from 'react-router-dom';
+import {addTask} from "./Task/tasks-reducer";
 
 
 const TodoListContainer = React.memo(() => {
     console.log("todo list container")
-    const todoLists = useSelector<AppRootStateType, TodoListDomainType[]>((state) => state.todoLists)
-    const isLoggedIn = useSelector<AppRootStateType, boolean>((state) => state.auth.isLoggedIn)
+    const todoLists = useAppSelector((state) => state.todoLists)
+    const isLoggedIn = useAppSelector((state) => state.auth.isLoggedIn)
 
     const dispatch = useDispatch()
 
@@ -31,34 +31,33 @@ const TodoListContainer = React.memo(() => {
         dispatch(fetchTodoLists())
     }, [])
 
-    const changeTodoListFilter = useCallback((trigger: string | undefined, todoListID: string) => {
+    const changeTodoListFilterCallback = useCallback((trigger: string | undefined, todoListID: string) => {
         switch (trigger) {
             case "all":
-                return dispatch(changeTodoListFilterAC("all", todoListID))
+                return dispatch(changeTodoListFilterAC({filter: "all", id:todoListID}))
             case "active":
-                return dispatch(changeTodoListFilterAC("active", todoListID))
+                return dispatch(changeTodoListFilterAC({filter: "active", id:todoListID}))
             case "completed":
-                return dispatch(changeTodoListFilterAC("completed", todoListID))
+                return dispatch(changeTodoListFilterAC({filter: "completed", id:todoListID}))
             default:
-                return dispatch(changeTodoListFilterAC("all", todoListID))
+                return dispatch(changeTodoListFilterAC({filter: "all", id:todoListID}))
         }
-
     }, [dispatch])
 
-    const addTodoList = useCallback((todoListTitle: string) => {
-        dispatch(createTodoListTC(todoListTitle))
+    const addTodoListCallback = useCallback((todoListTitle: string) => {
+        dispatch(createTodoList(todoListTitle))
     }, [dispatch])
 
-    const changeTodoListTitle = useCallback((title: string, todoListID: string) => {
-        dispatch(changeTodoListTitleTC(title, todoListID))
+    const changeTodoListTitleCallback = useCallback((title: string, todoListID: string) => {
+        dispatch(changeTodoListTitle({title, todoListID}))
     }, [dispatch])
 
-    const removeTodoList = useCallback((todoListID: string) => {
-        dispatch(deleteTodoListTC(todoListID))
+    const removeTodoListCallback = useCallback((todoListID: string) => {
+        dispatch(deleteTodoList(todoListID))
     }, [dispatch])
 
-    const addTaskForTodoList = useCallback((title: string, todoListID: string) => {
-        dispatch(addTaskTC(todoListID, title))
+    const addTaskForTodoListCallback = useCallback((taskTitle: string, todoListID: string) => {
+        dispatch(addTask({todoListID, taskTitle}))
     }, [dispatch])
 
     const content = todoLists.map(tl => {
@@ -69,10 +68,10 @@ const TodoListContainer = React.memo(() => {
                     <TodoList
                         todoList={tl}
                         disable={disable}
-                        changeTodoListFilter={ changeTodoListFilter }
-                        addTaskForTodoList={ addTaskForTodoList }
-                        changeTodoListTitle={ changeTodoListTitle }
-                        removeTodoList={ removeTodoList }
+                        changeTodoListFilter={ changeTodoListFilterCallback }
+                        addTaskForTodoList={ addTaskForTodoListCallback }
+                        changeTodoListTitle={ changeTodoListTitleCallback }
+                        removeTodoList={ removeTodoListCallback }
                     />
                 </Paper>
             </Grid>
@@ -86,7 +85,7 @@ const TodoListContainer = React.memo(() => {
     return (
         <Container fixed={ true }>
             <Grid container style={ {margin: "20px 0px"} }>
-                <AddItemForm addItem={ addTodoList }/>
+                <AddItemForm addItem={ addTodoListCallback }/>
             </Grid>
             <Grid container spacing={ 2 }>
                 { content }

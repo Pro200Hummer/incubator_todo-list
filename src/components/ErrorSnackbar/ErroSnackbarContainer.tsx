@@ -1,13 +1,13 @@
 import React, {useCallback} from "react";
 import {ErrorSnackbar} from "./ErrorSnackbar";
-import {useDispatch, useSelector} from "react-redux";
-import {AppRootStateType} from "../../app/store";
+import {useDispatch} from "react-redux";
+import {useAppSelector} from "../../app/hooks";
 import {setError} from "../../app/app-reducer";
 
 
 const ErrorSnackbarContainer: React.FC = React.memo(() => {
 
-    const error = useSelector<AppRootStateType, string | null>((state) => state.app.error)
+    const error = useAppSelector((state) => state.app.error)
     const dispatch = useDispatch()
     const isOpen = error !== null
 
