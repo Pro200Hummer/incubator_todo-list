@@ -8,7 +8,7 @@ export type LoginParamsType = {
     captcha?: string
 }
 
-type AuthMeResponseDataType = {
+export type AuthMeResponseDataType = {
     id: string
     email: string
     login: string

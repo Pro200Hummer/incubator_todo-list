@@ -1,9 +1,9 @@
 import {TaskStatuses, TodoTaskPriority} from "../../../api/todo-list-api";
 import {
-    addTaskAC,
-    changeTaskStatusAC,
-    changeTaskTitleAC,
-    removeTaskAC, setTasksAC,
+    addTask,
+    changeTaskStatus,
+    changeTaskTitle,
+    removeTask, setTasks,
     tasksReducer,
     TaskStateType
 } from "./tasks-reducer";
@@ -36,7 +36,7 @@ beforeEach(() => {
 
 test('correct task should be deleted from correct array', () => {
 
-    const action = removeTaskAC("todolistId2","2");
+    const action = removeTask("todolistId2","2");
 
     const endState = tasksReducer(startState, action)
 
@@ -62,7 +62,7 @@ test('correct task should be added to correct array', () => {
         todoListId: "todolistId2",
         ...restTaskParams
     }
-    const action = addTaskAC(newTask);
+    const action = addTask(newTask);
 
     const endState = tasksReducer(startState, action)
 
@@ -75,7 +75,7 @@ test('correct task should be added to correct array', () => {
 
 test('status of specified task should be changed', () => {
 
-    const action = changeTaskStatusAC("2", TaskStatuses.New, "todolistId2");
+    const action = changeTaskStatus("2", TaskStatuses.New, "todolistId2");
 
     const endState = tasksReducer(startState, action)
 
@@ -84,7 +84,7 @@ test('status of specified task should be changed', () => {
 });
 test('title of specified task should be changed', () => {
 
-    const action = changeTaskTitleAC("todolistId2", "3", "coffee");
+    const action = changeTaskTitle("todolistId2", "3", "coffee");
 
     const endState = tasksReducer(startState, action)
 
@@ -136,7 +136,7 @@ test('tasks should be added', () => {
         {id: "1", title: "vodka", status: TaskStatuses.New, todoListId: "todolistId2", ...restTaskParams},
         {id: "2", title: "pivo", status: TaskStatuses.New, todoListId: "todolistId2", ...restTaskParams}
     ]
-    const action = setTasksAC(tasks, "todoListID1")
+    const action = setTasks(tasks, "todoListID1")
     const endState = tasksReducer(startState, action)
 
     expect(endState["todoListID1"].length).toBe(2)

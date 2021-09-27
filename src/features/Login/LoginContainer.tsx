@@ -1,20 +1,20 @@
 import React, {useCallback} from "react";
 import {Login} from "./Login";
-import {useDispatch, useSelector} from "react-redux";
-import {setIsLoggedInTC} from "./auth-reducer";
+import {useDispatch} from "react-redux";
 import {LoginParamsType} from "../../api/auth-api";
-import {AppRootStateType} from "../../app/store";
 import {Redirect} from "react-router-dom";
+import {useAppSelector} from "../../app/hooks";
+import {setIsLoggedIn} from "./auth-reducer";
 
 
 export const LoginContainer: React.FC = React.memo(() => {
 
-    const isLoggedIn = useSelector<AppRootStateType, boolean>((state) => state.auth.isLoggedIn)
+    const isLoggedIn = useAppSelector((state) => state.auth.isLoggedIn)
     const dispatch = useDispatch()
 
     const loginHandler = useCallback((loginData: LoginParamsType) => {
-        dispatch(setIsLoggedInTC(loginData))
-    }, [dispatch])
+       dispatch(setIsLoggedIn(loginData))
+    }, [])
 
     if(isLoggedIn){
         return <Redirect to={'/'}/>
