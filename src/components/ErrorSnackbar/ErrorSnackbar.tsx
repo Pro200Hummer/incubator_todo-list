@@ -1,6 +1,6 @@
 import React from 'react'
 import Snackbar from '@material-ui/core/Snackbar'
-import MuiAlert, {AlertProps} from '@material-ui/lab/Alert'
+import {AlertProps} from "@material-ui/core";
 
 type ErrorSnackbarPropsType = {
     error: string | null
@@ -9,7 +9,7 @@ type ErrorSnackbarPropsType = {
 }
 
 const Alert = (props: AlertProps) => {
-    return <MuiAlert elevation={6} variant="filled" {...props} />
+    return <Alert elevation={6} variant="filled" {...props} />
 }
 
 export const ErrorSnackbar: React.FC<ErrorSnackbarPropsType> = React.memo(props => {
