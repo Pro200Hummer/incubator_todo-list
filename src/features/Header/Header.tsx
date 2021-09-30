@@ -33,7 +33,10 @@ const Header: React.FC<HeaderPropsType> = React.memo(props => {
                             </IconButton>
                         </Grid>
                         <Grid item xs={1}>
-                            {isLoggedIn ? <Button color="inherit" onClick={logoutClickHandler}>Log out</Button> :
+                            {isLoggedIn ?
+                                <Button color="inherit" variant="outlined" onClick={logoutClickHandler}>
+                                    Log out
+                                </Button> :
                                 <Button color={"inherit"} variant="outlined">Login</Button>}
                         </Grid>
                     </Grid>
