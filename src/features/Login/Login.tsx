@@ -41,7 +41,7 @@ export const Login: React.FC<LoginPropsType> = React.memo(props => {
     });
 
     return (
-        <Grid container justify="center">
+        <Grid container justifyContent="center">
             <Grid item xs={ 4 }>
                 <form onSubmit={ formik.handleSubmit }>
                     <FormControl>

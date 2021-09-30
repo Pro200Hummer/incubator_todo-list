@@ -35,6 +35,7 @@ const AddItemForm: React.FC<AddItemFormPropsType> = React.memo(props => {
             <TextField
             value={ title }
             label={"Title"}
+            variant={"standard"}
             error={error}
             disabled={props.disabled}
             onChange={ onChangeHandler }
