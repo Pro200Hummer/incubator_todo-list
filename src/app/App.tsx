@@ -6,6 +6,7 @@ import {useDispatch} from "react-redux";
 import {CircularProgress} from "@material-ui/core";
 import {useAppSelector} from "./hooks";
 import {initializedApp} from "./app-reducer";
+import {ModalContainer} from "../components/Modal/ModalContainer";
 
 export const App: React.FC = () => {
     console.log("app")
@@ -28,6 +29,7 @@ export const App: React.FC = () => {
             <HeaderContainer/>
             <Routes/>
             <ErrorSnackbarContainer/>
+            <ModalContainer/>
         </div>
 
     )
