@@ -9,13 +9,10 @@ import TodoList from "./TodoList";
 import { Redirect } from 'react-router-dom';
 import {useAppSelector} from "../../app/hooks";
 import {
-    changeTodoListFilterAC,
-    changeTodoListTitle,
-    createTodoList,
-    deleteTodoList,
-    fetchTodoLists
+    asyncTodoListActions,
+    changeTodoListFilterAC
 } from "./todolist-reducer";
-import {addTask} from "./Task/tasks-reducer";
+import {asyncTasksActions} from "./Task/tasks-reducer";
 import {changeModalStatus} from "../../utils/app-utils";
 
 
@@ -31,7 +28,7 @@ const TodoListContainer = React.memo(() => {
         if(!isLoggedIn){
             return
         }
-        dispatch(fetchTodoLists())
+        dispatch(asyncTodoListActions.fetchTodoLists())
     }, [dispatch, isLoggedIn])
 
     const changeTodoListFilterCallback = useCallback((trigger: string | undefined, todoListID: string) => {
@@ -48,19 +45,19 @@ const TodoListContainer = React.memo(() => {
     }, [dispatch])
 
     const addTodoListCallback = useCallback((todoListTitle: string) => {
-        dispatch(createTodoList(todoListTitle))
+        dispatch(asyncTodoListActions.createTodoList(todoListTitle))
     }, [dispatch])
 
     const changeTodoListTitleCallback = useCallback((title: string, todoListID: string) => {
-        dispatch(changeTodoListTitle({title, todoListID}))
+        dispatch(asyncTodoListActions.changeTodoListTitle({title, todoListID}))
     }, [dispatch])
 
     const removeTodoListCallback = useCallback((todoListID: string) => {
-        dispatch(deleteTodoList(todoListID))
+        dispatch(asyncTodoListActions.deleteTodoList(todoListID))
     }, [dispatch])
 
     const addTaskForTodoListCallback = useCallback((taskTitle: string, todoListID: string) => {
-        dispatch(addTask({todoListID, taskTitle}))
+        dispatch(asyncTasksActions.addTask({todoListID, taskTitle}))
     }, [dispatch])
 
     const content = todoLists.map(tl => {

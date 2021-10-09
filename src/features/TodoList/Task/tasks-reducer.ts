@@ -2,7 +2,7 @@ import {todoListApi, UpdateTaskRequestType} from "../../../api/todo-list-api";
 import {handleServerAppError, handleServerNetworkError} from "../../../utils/app-utils";
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 import {changeAppStatus} from "../../../app/app-reducer";
-import {asyncActions} from "../todolist-reducer";
+import {asyncTodoListActions} from "../todolist-reducer";
 import {RootStateType} from "../../../app/store";
 
 export type TaskStateType = {
@@ -171,15 +171,15 @@ export const taskSlice = createSlice({
                     }
                 }
             })
-            .addCase(asyncActions.createTodoList.fulfilled,
+            .addCase(asyncTodoListActions.createTodoList.fulfilled,
                 (state, action) => {
                     if (action.payload) return {...state, [action.payload.todoList.id]: []}
                 })
-            .addCase(asyncActions.deleteTodoList.fulfilled,
+            .addCase(asyncTodoListActions.deleteTodoList.fulfilled,
                 (state, action) => {
                     delete state[action.payload.todoListID]
                 })
-            .addCase(asyncActions.fetchTodoLists.fulfilled,
+            .addCase(asyncTodoListActions.fetchTodoLists.fulfilled,
                 (state, action) => {
                     if (action.payload) action.payload.todoLists.forEach((tl) => {
                         state[tl.id] = []
@@ -187,3 +187,5 @@ export const taskSlice = createSlice({
                 })
     }
 });
+
+export const asyncTasksActions = {fetchTasks, removeTask, addTask, updateTask}

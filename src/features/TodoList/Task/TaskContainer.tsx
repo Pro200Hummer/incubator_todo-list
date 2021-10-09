@@ -2,7 +2,7 @@ import React, {useCallback, useEffect} from "react";
 import {Task} from "./Task";
 import {useDispatch} from "react-redux";
 import {useAppSelector} from "../../../app/hooks";
-import {fetchTasks, removeTask, TaskStatuses, updateTask} from "./tasks-reducer";
+import {asyncTasksActions, TaskStatuses} from "./tasks-reducer";
 import {FilterValuesType} from "../todolist-reducer";
 
 type TaskContainerPropsType = {
@@ -12,13 +12,13 @@ type TaskContainerPropsType = {
 
 const TaskContainer: React.FC<TaskContainerPropsType> = (props) => {
     console.log("task container")
-    /*const allTasks = useSelector<AppRootStateType, TaskStateType>((state) => state.tasks)*/
+
     const allTasks = useAppSelector((state) => state.tasks)
 
     const dispatch = useDispatch()
 
     useEffect(() => {
-        dispatch(fetchTasks(props.todoListID))
+        dispatch(asyncTasksActions.fetchTasks(props.todoListID))
     }, [dispatch, props.todoListID])
 
     let taskForTodoList = allTasks[props.todoListID];
@@ -30,15 +30,15 @@ const TaskContainer: React.FC<TaskContainerPropsType> = (props) => {
     }
 
     const removeTaskCallback = useCallback((taskID: string) => {
-        dispatch(removeTask({todoListID: props.todoListID, taskID}))
+        dispatch(asyncTasksActions.removeTask({todoListID: props.todoListID, taskID}))
     }, [dispatch, props.todoListID])
 
     const changeStatusCallback = useCallback((taskID: string, status: TaskStatuses) => {
-        dispatch(updateTask({todoListID: props.todoListID, taskID, model:{status}}))
+        dispatch(asyncTasksActions.updateTask({todoListID: props.todoListID, taskID, model:{status}}))
     }, [dispatch, props.todoListID])
 
     const changeTaskTitleCallback = useCallback((taskID: string, taskTitle: string) => {
-        dispatch(updateTask({todoListID: props.todoListID, taskID, model: {title: taskTitle}}))
+        dispatch(asyncTasksActions.updateTask({todoListID: props.todoListID, taskID, model: {title: taskTitle}}))
     }, [dispatch, props.todoListID])
 
     const tasks = taskForTodoList.map(taskObj => {

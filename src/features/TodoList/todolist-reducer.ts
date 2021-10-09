@@ -129,7 +129,7 @@ export const todoListSlice = createSlice({
     }
 });
 
-export const asyncActions = {
+export const asyncTodoListActions = {
     fetchTodoLists,
     createTodoList,
     changeTodoListTitle,
