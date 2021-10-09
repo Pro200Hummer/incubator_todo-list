@@ -2,7 +2,8 @@ import React, {useCallback, useEffect} from 'react'
 import {useDispatch} from "react-redux";
 import Grid from "@material-ui/core/Grid";
 import AddItemForm from "../../components/AddItemForm/AddItemForm";
-import {Container} from "@material-ui/core";
+import {Container, IconButton} from "@material-ui/core";
+import {AddCircle} from "@material-ui/icons";
 import Paper from "@material-ui/core/Paper";
 import TodoList from "./TodoList";
 import { Redirect } from 'react-router-dom';
@@ -15,6 +16,8 @@ import {
     fetchTodoLists
 } from "./todolist-reducer";
 import {addTask} from "./Task/tasks-reducer";
+import {changeModalStatus} from "../../utils/app-utils";
+
 
 
 const TodoListContainer = React.memo(() => {
@@ -29,7 +32,7 @@ const TodoListContainer = React.memo(() => {
             return
         }
         dispatch(fetchTodoLists())
-    }, [])
+    }, [dispatch, isLoggedIn])
 
     const changeTodoListFilterCallback = useCallback((trigger: string | undefined, todoListID: string) => {
         switch (trigger) {
@@ -86,6 +89,13 @@ const TodoListContainer = React.memo(() => {
         <Container fixed={ true }>
             <Grid container style={ {margin: "20px 0px"} }>
                 <AddItemForm addItem={ addTodoListCallback }/>
+                <IconButton onClick={e => changeModalStatus(e, dispatch)}>
+                    <AddCircle
+                        fontSize={"large"}
+                        color={'primary'}
+                        data-action={"add-list"}
+                    />
+                </IconButton>
             </Grid>
             <Grid container spacing={ 2 }>
                 { content }

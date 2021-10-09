@@ -2,7 +2,7 @@ import React, {useCallback, useEffect} from "react";
 import {Task} from "./Task";
 import {useDispatch} from "react-redux";
 import {useAppSelector} from "../../../app/hooks";
-import {changeTaskStatus, changeTaskTitleTC, fetchTasks, removeTask, TaskStatuses} from "./tasks-reducer";
+import {fetchTasks, removeTask, TaskStatuses, updateTask} from "./tasks-reducer";
 import {FilterValuesType} from "../todolist-reducer";
 
 type TaskContainerPropsType = {
@@ -19,7 +19,7 @@ const TaskContainer: React.FC<TaskContainerPropsType> = (props) => {
 
     useEffect(() => {
         dispatch(fetchTasks(props.todoListID))
-    }, [])
+    }, [dispatch, props.todoListID])
 
     let taskForTodoList = allTasks[props.todoListID];
     if (props.filter === "active") {
@@ -31,15 +31,15 @@ const TaskContainer: React.FC<TaskContainerPropsType> = (props) => {
 
     const removeTaskCallback = useCallback((taskID: string) => {
         dispatch(removeTask({todoListID: props.todoListID, taskID}))
-    }, [dispatch])
+    }, [dispatch, props.todoListID])
 
     const changeStatusCallback = useCallback((taskID: string, status: TaskStatuses) => {
-        dispatch(changeTaskStatus({todoListID: props.todoListID, taskID, status}))
-    }, [dispatch])
+        dispatch(updateTask({todoListID: props.todoListID, taskID, model:{status}}))
+    }, [dispatch, props.todoListID])
 
     const changeTaskTitleCallback = useCallback((taskID: string, taskTitle: string) => {
-        dispatch(changeTaskTitleTC({todoListID: props.todoListID, taskID, taskTitle}))
-    }, [dispatch])
+        dispatch(updateTask({todoListID: props.todoListID, taskID, model: {title: taskTitle}}))
+    }, [dispatch, props.todoListID])
 
     const tasks = taskForTodoList.map(taskObj => {
         return (

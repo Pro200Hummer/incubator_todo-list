@@ -48,7 +48,7 @@ export const Login: React.FC<LoginPropsType> = React.memo(props => {
                         <FormLabel>
                             <p>To log in get registered
                                 <a href={ 'https://social-networ.samuraijs.com/' }
-                                   target={ '_blank' }>here
+                                   target={ '_blank' } rel="noopener noreferrer">here
                                 </a>
                             </p>
                             <p>or use common test account credentials:</p>

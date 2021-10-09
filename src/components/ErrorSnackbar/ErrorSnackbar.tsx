@@ -1,6 +1,6 @@
 import React from 'react'
 import Snackbar from '@material-ui/core/Snackbar'
-import {AlertProps} from "@material-ui/core";
+import {Alert, AlertProps} from "@material-ui/core";
 
 type ErrorSnackbarPropsType = {
     error: string | null
@@ -8,9 +8,9 @@ type ErrorSnackbarPropsType = {
     zeroingError: () => void
 }
 
-const Alert = (props: AlertProps) => {
-    return <Alert elevation={6} variant="filled" {...props} />
-}
+/*const Alert = (props: AlertProps) => {
+    return <Alert elevation={6} variant="filled" {...props}/>
+};*/
 
 export const ErrorSnackbar: React.FC<ErrorSnackbarPropsType> = React.memo(props => {
 
@@ -29,7 +29,7 @@ export const ErrorSnackbar: React.FC<ErrorSnackbarPropsType> = React.memo(props 
 
     return (
         <Snackbar open={isOpen} autoHideDuration={3000} onClose={handleClose}>
-            <Alert onClose={handleClose} severity="error">
+            <Alert onClose={handleClose} severity="error" elevation={6} variant="filled">
                 {error}
             </Alert>
         </Snackbar>

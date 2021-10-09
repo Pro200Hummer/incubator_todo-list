@@ -31,11 +31,11 @@ const TodoList: React.FC<TodoListPropsType> = React.memo(props => {
 
     const changeFilter = useCallback((e: MouseEvent<HTMLButtonElement>) => {
         changeTodoListFilter(e.currentTarget.dataset.filter, todoList.id)
-    }, [todoList.id])
+    }, [changeTodoListFilter, todoList.id])
 
     const deleteTodoList = useCallback(() => {
         removeTodoList(todoList.id)
-    }, [todoList.id])
+    }, [removeTodoList, todoList.id])
 
     const addTask = useCallback((title: string) => {
         addTaskForTodoList(title, todoList.id)

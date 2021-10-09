@@ -5,7 +5,7 @@ import {TodoListType} from "../features/TodoList/todolist-reducer";
 export type TaskAPIType = {
     items: TaskType[]
 };
-
+export type FieldErrorType = { field: string; error: string }
 export type ResponseType<D = {}> = {
     "data": D
     "messages": string[]
@@ -14,12 +14,14 @@ export type ResponseType<D = {}> = {
 
 export type UpdateTaskRequestType = {
     title?: string
-    description?: string | null
+    description?: string
     status?: TaskStatuses
     priority?: TodoTaskPriority
-    startDate?: string | null
-    deadline?: string | null
+    startDate?: string
+    deadline?: string
 };
+
+
 
 export const instance = axios.create({
     baseURL: `https://social-network.samuraijs.com/api/1.1/`,

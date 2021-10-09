@@ -25,10 +25,10 @@ const initialState: AppReducerStateType = {
     error: null,
     isInitialized: false,
     modal: {
-        isOpen: true,
-        modalTitle: 'title',
+        isOpen: false,
+        modalTitle: '',
         modalStatus: 'no-status',
-        itemID: 'a06d9807-03c2-484c-a192-010e89981528',
+        itemID: '',
     }
 }
 
@@ -69,7 +69,7 @@ export const appSlice = createSlice({
         setModalStatus: (state, action: PayloadAction<ModalType>) => {
             state.modal = action.payload
         },
-    },
+    }
 });
 
 export const {changeAppStatus, setError, setIsInitialized, setModalStatus} = appSlice.actions

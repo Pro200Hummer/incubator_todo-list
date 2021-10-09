@@ -1,8 +1,9 @@
-import {todoListApi} from "../../../api/todo-list-api";
+import {todoListApi, UpdateTaskRequestType} from "../../../api/todo-list-api";
 import {handleServerAppError, handleServerNetworkError} from "../../../utils/app-utils";
-import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
+import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 import {changeAppStatus} from "../../../app/app-reducer";
-import {addTodoListAC, removeTodoListAC, setTodoListsAC, TodoListType} from "../todolist-reducer";
+import {asyncActions} from "../todolist-reducer";
+import {RootStateType} from "../../../app/store";
 
 export type TaskStateType = {
     [key: string]: TaskType[]
@@ -11,7 +12,7 @@ export type TaskStateType = {
 export type TaskType = {
     id: string,
     title: string,
-    description: null | string,
+    description: string,
     todoListId: string,
     order: number,
     status: TaskStatuses,
@@ -40,15 +41,10 @@ export type RemoveTaskActionType = {
     todoListID: string
     taskID: string
 };
-export type ChangeTaskStatusActionType = {
+export type UpdateTaskActionType = {
     taskID: string
-    status: TaskStatuses
+    model: UpdateTaskRequestType
     todoListID: string
-};
-export type ChangeTaskTitleActionType = {
-    todoListID: string
-    taskID: string
-    taskTitle: string
 };
 export type SetTasksActionType = {
     tasks: TaskType[]
@@ -68,8 +64,8 @@ export const fetchTasks = createAsyncThunk(
         try {
             const res = await todoListApi.getTasks(todoListID)
             const tasks: TaskType[] = res.data.items
-            dispatch(taskSlice.actions.setTasksAC({tasks, todoListID}))
             dispatch(changeAppStatus("succeed"))
+            return {todoListID, tasks}
         } catch (error) {
             handleServerNetworkError(error.message, dispatch)
         }
@@ -81,8 +77,8 @@ export const removeTask = createAsyncThunk(
         dispatch(changeAppStatus("loading"))
         try {
             await todoListApi.deleteTask(params.todoListID, params.taskID)
-            dispatch(taskSlice.actions.removeTaskAC(params))
             dispatch(changeAppStatus("succeed"))
+            return {todoListID: params.todoListID, taskID: params.taskID}
         } catch (error) {
             handleServerNetworkError(error.message, dispatch)
         }
@@ -96,88 +92,98 @@ export const addTask = createAsyncThunk(
             const res = await todoListApi.createTask(params.todoListID, params.taskTitle)
             const task = res.data.data.item
             if (res.data.resultCode === 0) {
-                dispatch(taskSlice.actions.addTaskAC(task))
+                dispatch(changeAppStatus("succeed"))
+                return {task, todoListID: params.todoListID}
             } else {
                 handleServerAppError(res.data, dispatch)
             }
-            dispatch(changeAppStatus("succeed"))
         } catch (error) {
             handleServerNetworkError(error.message, dispatch)
         }
     });
 
-export const changeTaskStatus = createAsyncThunk(
-    'tasks/changeTaskStatus',
-    async (params: ChangeTaskStatusActionType, {dispatch}) => {
-        dispatch(changeAppStatus("loading"))
-        todoListApi.updateTask(params.todoListID, params.taskID, {status: params.status})
-            .then(() => {
-                dispatch(taskSlice.actions.changeTaskStatusAC(params))
-                dispatch(changeAppStatus("succeed"))
-            })
-            .catch(error => {
-                handleServerNetworkError(error.message, dispatch)
-            })
-    });
+export const updateTask = createAsyncThunk(
+    'tasks/updateTask',
+    async (params: UpdateTaskActionType, thunkAPI) => {
+        const state = thunkAPI.getState() as RootStateType
 
-export const changeTaskTitleTC = createAsyncThunk(
-    'tasks/changeTaskStatus',
-    async (params: ChangeTaskTitleActionType, {dispatch}) => {
-        dispatch(changeAppStatus("loading"))
+        const task = state.tasks[params.todoListID].find(t => t.id === params.taskID)
+        if (!task) {
+            return thunkAPI.rejectWithValue('task not found in the state')
+        }
+
+        const apiModel: UpdateTaskRequestType = {
+            deadline: task.deadline,
+            description: task.description,
+            priority: task.priority,
+            startDate: task.startDate,
+            title: task.title,
+            status: task.status,
+            ...params.model
+        }
+        thunkAPI.dispatch(changeAppStatus("loading"))
         try {
-            await todoListApi.updateTask(params.todoListID, params.taskID, {title: params.taskTitle})
-            dispatch(taskSlice.actions.changeTaskTitleAC(params))
-            dispatch(changeAppStatus("succeed"))
+            const res = await todoListApi.updateTask(params.todoListID, params.taskID, apiModel)
+            if (res.data.resultCode === 0) {
+                thunkAPI.dispatch(changeAppStatus("succeed"))
+                return {todoListID: params.todoListID, taskID: params.taskID, model: params.model}
+            } else {
+                handleServerAppError(res.data, thunkAPI.dispatch)
+            }
         } catch (error) {
-            handleServerNetworkError(error.message, dispatch)
+            handleServerNetworkError(error, thunkAPI.dispatch)
         }
     });
 
 export const taskSlice = createSlice({
     name: 'tasks',
     initialState,
-    reducers: {
-        removeTaskAC: (state, action: PayloadAction<RemoveTaskActionType>) => {
-            return {
-                ...state, [action.payload.todoListID]: state[action.payload.todoListID].filter(task =>
-                    task.id !== action.payload.taskID)
-            }
-        },
-        addTaskAC: (state, action: PayloadAction<TaskType>) => {
-            return {...state, [action.payload.todoListId]: [action.payload, ...state[action.payload.todoListId]]}
-        },
-        changeTaskStatusAC: (state, action: PayloadAction<ChangeTaskStatusActionType>) => {
-            return {
-                ...state, [action.payload.todoListID]: state[action.payload.todoListID]
-                    .map(t => t.id === action.payload.taskID ? {...t, status: action.payload.status} : t)
-            }
-        },
-        changeTaskTitleAC: (state, action: PayloadAction<ChangeTaskTitleActionType>) => {
-            return {
-                ...state, [action.payload.todoListID]: state[action.payload.todoListID]
-                    .map(t => t.id === action.payload.taskID ? {...t, title: action.payload.taskTitle} : t)
-            }
-        },
-        setTasksAC: (state, action: PayloadAction<SetTasksActionType>) => {
-            return {...state, [action.payload.todoListID]: action.payload.tasks}
-        }
-    },
-    extraReducers: (builder => {
+    reducers: {},
+    extraReducers: builder => {
         builder
-            .addCase(addTodoListAC,
-                (state, action: PayloadAction<TodoListType>) => {
-                    return {...state, [action.payload.id]: []}
+            .addCase(fetchTasks.fulfilled, (state, action) => {
+                if (action.payload) return {...state, [action.payload.todoListID]: action.payload.tasks}
+            })
+            .addCase(removeTask.fulfilled, (state, action) => {
+                if (action.payload) return {
+                    ...state, [action.payload.todoListID]: state[action.payload.todoListID]
+                        .filter(task => {
+                            if (action.payload) {
+                                return task.id !== action.payload.taskID
+                            }
+                        })
+                }
+            })
+            .addCase(addTask.fulfilled, (state, action) => {
+                if (action.payload) return {
+                    ...state,
+                    [action.payload.todoListID]: [action.payload.task, ...state[action.payload.todoListID]]
+                }
+            })
+            .addCase(updateTask.fulfilled, (state, action) => {
+                if(action.payload){
+                    const tasks = state[action.payload.todoListID]
+                    const index = tasks.findIndex(t => {
+                        if(action.payload) return  t.id === action.payload.taskID
+                    })
+                    if (index > -1 ) {
+                        tasks[index] = {...tasks[index], ...action.payload.model}
+                    }
+                }
+            })
+            .addCase(asyncActions.createTodoList.fulfilled,
+                (state, action) => {
+                    if (action.payload) return {...state, [action.payload.todoList.id]: []}
                 })
-            .addCase(removeTodoListAC,
-                (state, action: PayloadAction<string>) => {
-                    delete state[action.payload]
-                    return {...state}
+            .addCase(asyncActions.deleteTodoList.fulfilled,
+                (state, action) => {
+                    delete state[action.payload.todoListID]
                 })
-            .addCase(setTodoListsAC,
-                (state, action: PayloadAction<TodoListType[]>) => {
-                    action.payload.forEach((tl) => {
+            .addCase(asyncActions.fetchTodoLists.fulfilled,
+                (state, action) => {
+                    if (action.payload) action.payload.todoLists.forEach((tl) => {
                         state[tl.id] = []
                     })
                 })
-    })
+    }
 });

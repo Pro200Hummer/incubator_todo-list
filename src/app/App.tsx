@@ -15,7 +15,7 @@ export const App: React.FC = () => {
 
     useEffect(() => {
         dispatch(initializedApp())
-    }, [])
+    }, [dispatch])
 
     if (!isInitialized) {
         return (

@@ -24,16 +24,16 @@ export const Task: React.FC<TaskPropsType> = React.memo(props => {
 
     const removeTask = useCallback(() => {
         deleteTask(task.id)
-    }, [task.id])
+    }, [deleteTask, task.id])
 
     const changeStatus = useCallback((e: ChangeEvent<HTMLInputElement>) => {
         const taskStatus = e.currentTarget.checked ? TaskStatuses.Completed : TaskStatuses.New
         changeTaskStatus(task.id, taskStatus);
-    }, [task.id])
+    }, [changeTaskStatus, task.id])
 
     const changeTitle = useCallback((title: string) => {
         changeTaskTitle(task.id, title)
-    }, [task.id])
+    }, [changeTaskTitle, task.id])
 
 
     return (

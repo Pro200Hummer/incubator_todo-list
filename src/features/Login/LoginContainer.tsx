@@ -14,7 +14,7 @@ export const LoginContainer: React.FC = React.memo(() => {
 
     const loginHandler = useCallback((loginData: LoginParamsType) => {
        dispatch(setIsLoggedIn(loginData))
-    }, [])
+    }, [dispatch])
 
     if(isLoggedIn){
         return <Redirect to={'/'}/>
