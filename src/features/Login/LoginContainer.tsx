@@ -4,7 +4,7 @@ import {useDispatch} from "react-redux";
 import {LoginParamsType} from "../../api/auth-api";
 import {Redirect} from "react-router-dom";
 import {useAppSelector} from "../../app/hooks";
-import {setIsLoggedIn} from "./auth-reducer";
+import {asyncAuthActions} from "./auth-reducer";
 
 
 export const LoginContainer: React.FC = React.memo(() => {
@@ -13,7 +13,7 @@ export const LoginContainer: React.FC = React.memo(() => {
     const dispatch = useDispatch()
 
     const loginHandler = useCallback((loginData: LoginParamsType) => {
-       dispatch(setIsLoggedIn(loginData))
+       dispatch(asyncAuthActions.login(loginData))
     }, [dispatch])
 
     if(isLoggedIn){

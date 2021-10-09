@@ -1,7 +1,6 @@
 import {authApi} from "../api/auth-api";
 import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {handleServerAppError, handleServerNetworkError} from "../utils/app-utils";
-import {setIsLoggedInAC} from "../features/Login/auth-reducer";
 
 export type RequestStatusType = 'idle' | 'loading' | 'succeed' | 'failed';
 export type ModalStatusType = 'no-status' | 'add-list' | 'add-task';
@@ -35,21 +34,22 @@ const initialState: AppReducerStateType = {
 export const initializedApp = createAsyncThunk(
     'app/initializedApp',
     async (_, {dispatch}) => {
-        dispatch(appSlice.actions.changeAppStatus("loading"))
+        dispatch(changeAppStatus("loading"))
         try {
             await authApi.me()
                 .then(res => {
                     if (res.data.resultCode === 0) {
-                        dispatch(setIsLoggedInAC(true))
+                        /*dispatch(setIsLoggedInAC(true))*/
+                        dispatch(setIsInitialized(true))
+                        return
                     } else {
-                        handleServerAppError(res.data, dispatch)
+                       return  handleServerAppError(res.data, dispatch)
                     }
-                    dispatch(appSlice.actions.setIsInitialized(true))
                 })
         } catch (err) {
-            handleServerNetworkError(err, dispatch)
+            return handleServerNetworkError(err, dispatch)
         }
-        dispatch(appSlice.actions.changeAppStatus("succeed"))
+        dispatch(changeAppStatus("succeed"))
     }
 );
 
@@ -72,6 +72,7 @@ export const appSlice = createSlice({
     }
 });
 
+export const asyncAppActions = {initializedApp}
 export const {changeAppStatus, setError, setIsInitialized, setModalStatus} = appSlice.actions
 export default appSlice.reducer
 

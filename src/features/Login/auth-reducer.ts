@@ -1,7 +1,7 @@
 import {authApi, LoginParamsType} from "../../api/auth-api";
 import {handleServerAppError, handleServerNetworkError} from "../../utils/app-utils";
-import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
-import {changeAppStatus} from "../../app/app-reducer";
+import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
+import {asyncAppActions, changeAppStatus} from "../../app/app-reducer";
 
 type InitialStateType = {
     isLoggedIn: boolean
@@ -10,7 +10,7 @@ const initialState: InitialStateType = {
     isLoggedIn: false
 }
 
-export const setIsLoggedIn = createAsyncThunk(
+export const login = createAsyncThunk(
     'auth/setIsLoggedIn',
     async (data: LoginParamsType, {dispatch}) => {
         dispatch(changeAppStatus("loading"))
@@ -18,18 +18,18 @@ export const setIsLoggedIn = createAsyncThunk(
             authApi.login(data)
                 .then(res => {
                     if (res.data.resultCode === 0) {
-                        dispatch(authSlice.actions.setIsLoggedInAC(true))
+                        return
                     } else {
-                        handleServerAppError(res.data, dispatch)
+                        return handleServerAppError(res.data, dispatch)
                     }
                 })
         } catch (err) {
-            handleServerNetworkError(err, dispatch)
+            return handleServerNetworkError(err, dispatch)
         }
         dispatch(changeAppStatus("succeed"))
     });
 
-export const removeLogin = createAsyncThunk(
+export const logout = createAsyncThunk(
     'auth/removeLogin',
     async (_, {dispatch}) => {
         dispatch(changeAppStatus("loading"))
@@ -37,13 +37,13 @@ export const removeLogin = createAsyncThunk(
             authApi.logout()
                 .then(res => {
                     if (res.data.resultCode === 0) {
-                        dispatch(authSlice.actions.setIsLoggedInAC(false))
+                        return
                     } else {
-                        handleServerAppError(res.data, dispatch)
+                       return handleServerAppError(res.data, dispatch)
                     }
                 })
         } catch (error) {
-            handleServerNetworkError(error.message, dispatch)
+           return handleServerNetworkError(error.message, dispatch)
         }
         dispatch(changeAppStatus('succeed'))
     });
@@ -52,12 +52,27 @@ export const authSlice = createSlice({
     name: 'auth',
     initialState,
     reducers: {
-        setIsLoggedInAC: (state, action: PayloadAction<boolean>) => {
+        /*setIsLoggedInAC: (state, action: PayloadAction<boolean>) => {
             state.isLoggedIn = action.payload
-        },
+        },*/
     },
+    extraReducers: builder => {
+        builder
+            .addCase(asyncAppActions.initializedApp.fulfilled,
+                (state) => {
+                    state.isLoggedIn = true
+                })
+            .addCase(login.fulfilled,
+                (state) => {
+                    state.isLoggedIn = true
+                })
+            .addCase(logout.fulfilled,
+                (state) => {
+                    state.isLoggedIn = false
+                })
+    }
 });
 
-export const {setIsLoggedInAC} = authSlice.actions
-
+/*export const {setIsLoggedInAC} = authSlice.actions*/
+export const asyncAuthActions = {login, logout}
 export default authSlice.reducer
