@@ -1,35 +1,13 @@
 import {todoListApi} from "../../api/todo-list-api";
-import {RequestStatusType} from "../../app/app-reducer";
 import {handleServerAppError, handleServerNetworkError} from "../../utils/app-utils";
 import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {changeAppStatus} from "../../app/app-reducer";
-
-export type FilterValuesType = "all" | "active" | "completed";
-
-export type TodoListType = {
-    id: string,
-    title: string,
-    addedDate: string,
-    order: number
-};
-
-export type TodoListDomainType = TodoListType & {
-    filter: FilterValuesType,
-    entityStatus: RequestStatusType,
-};
-
-export type ChangeTodoListFilterPayloadType = {
-    filter: FilterValuesType
-    id: string
-}
-export type ChangeTodoListTitleType = {
-    title: string
-    todoListID: string
-}
-export type ChangeEntityStatusPayloadType = {
-    entityStatus: RequestStatusType
-    todoListID: string
-}
+import {
+    ChangeEntityStatusPayloadType,
+    ChangeTodoListFilterPayloadType,
+    ChangeTodoListTitleType,
+    TodoListDomainType
+} from "./todo-list-types";
 
 const initialState: TodoListDomainType[] = [];
 

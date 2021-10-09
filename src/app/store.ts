@@ -4,7 +4,7 @@ import {appSlice} from "./app-reducer";
 import {authSlice} from "../features/Login/auth-reducer";
 import {todoListSlice} from "../features/TodoList/todolist-reducer";
 import {taskSlice} from "../features/TodoList/Task/tasks-reducer";
-import { FieldErrorType } from "../api/todo-list-api";
+import {FieldErrorType} from "../api/api-types";
 
 
 export const store = configureStore({

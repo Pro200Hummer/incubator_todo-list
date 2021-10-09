@@ -1,7 +1,7 @@
 import React from 'react'
 import {Checkbox, FormControl, FormControlLabel, FormGroup, FormLabel, TextField, Button, Grid} from '@material-ui/core'
 import {useFormik} from "formik";
-import {LoginParamsType} from "../../api/auth-api";
+import {LoginParamsType} from "../../api/api-types";
 
 type LoginPropsType = {
     loginHandler: (loginData: LoginParamsType) => void

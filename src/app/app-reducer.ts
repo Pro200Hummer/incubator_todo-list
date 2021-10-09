@@ -1,6 +1,6 @@
-import {authApi} from "../api/auth-api";
 import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {handleServerAppError, handleServerNetworkError} from "../utils/app-utils";
+import {authApi} from "../api/todo-list-api";
 
 export type RequestStatusType = 'idle' | 'loading' | 'succeed' | 'failed';
 export type ModalStatusType = 'no-status' | 'add-list' | 'add-task';

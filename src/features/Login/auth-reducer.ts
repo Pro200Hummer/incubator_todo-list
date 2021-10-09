@@ -1,7 +1,9 @@
-import {authApi, LoginParamsType} from "../../api/auth-api";
+
 import {handleServerAppError, handleServerNetworkError} from "../../utils/app-utils";
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 import {asyncAppActions, changeAppStatus} from "../../app/app-reducer";
+import {LoginParamsType} from "../../api/api-types";
+import { authApi } from "../../api/todo-list-api";
 
 type InitialStateType = {
     isLoggedIn: boolean

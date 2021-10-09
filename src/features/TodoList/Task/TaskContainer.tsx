@@ -2,8 +2,9 @@ import React, {useCallback, useEffect} from "react";
 import {Task} from "./Task";
 import {useDispatch} from "react-redux";
 import {useAppSelector} from "../../../app/hooks";
-import {asyncTasksActions, TaskStatuses} from "./tasks-reducer";
-import {FilterValuesType} from "../todolist-reducer";
+import {asyncTasksActions} from "./tasks-reducer";
+import {FilterValuesType} from "../todo-list-types";
+import {TaskStatuses} from "./task-types";
 
 type TaskContainerPropsType = {
     todoListID: string

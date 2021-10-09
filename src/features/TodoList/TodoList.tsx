@@ -6,7 +6,7 @@ import {Button} from "@material-ui/core";
 import IconButton from "@material-ui/core/IconButton";
 import {Delete} from "@material-ui/icons";
 import TaskContainer from "./Task/TaskContainer";
-import {TodoListDomainType} from "./todolist-reducer";
+import {TodoListDomainType} from "./todo-list-types";
 
 export type TodoListPropsType = {
     todoList: TodoListDomainType

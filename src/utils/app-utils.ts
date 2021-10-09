@@ -1,6 +1,6 @@
 import {MouseEvent} from 'react';
-import {ResponseType} from '../api/todo-list-api'
 import {Dispatch} from "redux";
+import {ResponseType} from "../api/api-types";
 import {changeAppStatus, setError, setModalStatus} from "../app/app-reducer";
 
 export const handleServerNetworkError = (errorMessage: string | null, dispatch: Dispatch) => {

@@ -1,26 +1,7 @@
 import axios from "axios";
-import {TaskStatuses, TaskType, TodoTaskPriority} from "../features/TodoList/Task/tasks-reducer";
-import {TodoListType} from "../features/TodoList/todolist-reducer";
-
-export type TaskAPIType = {
-    items: TaskType[]
-};
-export type FieldErrorType = { field: string; error: string }
-export type ResponseType<D = {}> = {
-    "data": D
-    "messages": string[]
-    "resultCode": number
-};
-
-export type UpdateTaskRequestType = {
-    title?: string
-    description?: string
-    status?: TaskStatuses
-    priority?: TodoTaskPriority
-    startDate?: string
-    deadline?: string
-};
-
+import {ResponseType, AuthMeResponseDataType, LoginParamsType, TaskAPIType, UpdateTaskRequestType} from "./api-types";
+import {TaskType} from "../features/TodoList/Task/task-types";
+import {TodoListType} from "../features/TodoList/todo-list-types";
 
 
 export const instance = axios.create({
@@ -30,6 +11,18 @@ export const instance = axios.create({
         'API-key': 'c3ff16a4-4b9d-490a-b188-2440deac59e8'
     }
 });
+
+export const authApi = {
+    me() {
+        return instance.get<ResponseType<AuthMeResponseDataType>>(`auth/me`)
+    },
+    login(model: LoginParamsType) {
+        return instance.post<ResponseType<{ userId: string }>>(`auth/login`, model)
+    },
+    logout() {
+        return instance.delete<ResponseType>(`auth/login`)
+    }
+}
 
 export const todoListApi = {
     createTodoList(todoListTitle: string) {
