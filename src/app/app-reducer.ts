@@ -1,23 +1,7 @@
 import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {handleServerAppError, handleServerNetworkError} from "../utils/app-utils";
 import {authApi} from "../api/todo-list-api";
-
-export type RequestStatusType = 'idle' | 'loading' | 'succeed' | 'failed';
-export type ModalStatusType = 'no-status' | 'add-list' | 'add-task';
-
-export type ModalType = {
-    isOpen: boolean
-    modalStatus: ModalStatusType
-    modalTitle: string | null
-    itemID?: string
-}
-
-export type AppReducerStateType = {
-    status: RequestStatusType
-    error: string | null,
-    isInitialized: boolean
-    modal: ModalType
-}
+import {AppReducerStateType, ModalType, RequestStatusType} from "./app-types";
 
 const initialState: AppReducerStateType = {
     status: 'idle',
