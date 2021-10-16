@@ -141,3 +141,4 @@ export const taskSlice = createSlice({
 });
 
 export const asyncTasksActions = {fetchTasks, removeTask, addTask, updateTask}
+export const tasksReducer = taskSlice.reducer

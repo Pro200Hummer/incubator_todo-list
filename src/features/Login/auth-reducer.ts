@@ -1,14 +1,13 @@
-
 import {handleServerAppError, handleServerNetworkError} from "../../utils/app-utils";
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 import {asyncAppActions, changeAppStatus} from "../../app/app-reducer";
 import {LoginParamsType} from "../../api/api-types";
-import { authApi } from "../../api/todo-list-api";
+import {authApi} from "../../api/todo-list-api";
 
-type InitialStateType = {
+export type AuthInitialStateType = {
     isLoggedIn: boolean
 }
-const initialState: InitialStateType = {
+const initialState: AuthInitialStateType = {
     isLoggedIn: false
 }
 
@@ -41,11 +40,11 @@ export const logout = createAsyncThunk(
                     if (res.data.resultCode === 0) {
                         return
                     } else {
-                       return handleServerAppError(res.data, dispatch)
+                        return handleServerAppError(res.data, dispatch)
                     }
                 })
         } catch (error) {
-           return handleServerNetworkError(error.message, dispatch)
+            return handleServerNetworkError(error.message, dispatch)
         }
         dispatch(changeAppStatus('succeed'))
     });
@@ -53,11 +52,7 @@ export const logout = createAsyncThunk(
 export const authSlice = createSlice({
     name: 'auth',
     initialState,
-    reducers: {
-        /*setIsLoggedInAC: (state, action: PayloadAction<boolean>) => {
-            state.isLoggedIn = action.payload
-        },*/
-    },
+    reducers: {},
     extraReducers: builder => {
         builder
             .addCase(asyncAppActions.initializedApp.fulfilled,
@@ -77,4 +72,4 @@ export const authSlice = createSlice({
 
 /*export const {setIsLoggedInAC} = authSlice.actions*/
 export const asyncAuthActions = {login, logout}
-export default authSlice.reducer
+export const authReducer = authSlice.reducer

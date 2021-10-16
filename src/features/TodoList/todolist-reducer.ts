@@ -113,5 +113,5 @@ export const asyncTodoListActions = {
     changeTodoListTitle,
     deleteTodoList,
 }
-export const {changeTodoListFilterAC} = todoListSlice.actions
-export default todoListSlice.reducer
+export const {changeTodoListFilterAC, changeEntityStatusAC} = todoListSlice.actions
+export const todoListReducer = todoListSlice.reducer

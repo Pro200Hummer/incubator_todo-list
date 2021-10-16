@@ -58,7 +58,7 @@ export const appSlice = createSlice({
 
 export const asyncAppActions = {initializedApp}
 export const {changeAppStatus, setError, setIsInitialized, setModalStatus} = appSlice.actions
-export default appSlice.reducer
+export const appReducer = appSlice.reducer
 
 
 

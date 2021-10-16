@@ -1,4 +1,5 @@
-import {appReducer, AppReducerStateType, changeAppStatus, setError, setIsInitialized} from "./app-reducer";
+import {appReducer, changeAppStatus, setError, setIsInitialized} from "./app-reducer";
+import { AppReducerStateType } from "./app-types";
 
 
 let startState: AppReducerStateType
@@ -7,6 +8,12 @@ beforeEach(() => {
         status: "loading",
         error: null,
         isInitialized: false,
+        modal:{
+            modalStatus: "no-status",
+            itemID: 'someID',
+            modalTitle: 'someTitle',
+            isOpen: false
+        }
     }
 })
 
@@ -32,3 +39,4 @@ test('initialized status should be changed', () => {
 
     expect(endState.isInitialized).toBeTruthy()
 })
+
