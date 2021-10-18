@@ -6,6 +6,7 @@ import {useDispatch} from "react-redux";
 import {useAppSelector} from "./hooks";
 import {initializedApp} from "./app-reducer";
 import {ModalContainer} from "../components/Modal/ModalContainer";
+import {CircularProgress} from "@material-ui/core";
 
 export const App: React.FC = () => {
     console.log("app")
@@ -16,13 +17,13 @@ export const App: React.FC = () => {
         dispatch(initializedApp())
     }, [dispatch])
 
-   /* if (!isInitialized) {
+    if (!isInitialized) {
         return (
             <div style={{position: 'fixed', top: '30%', textAlign: 'center', width: '100%'}}>
                 <CircularProgress/>
             </div>
         )
-    }*/
+    }
     return (
         <div>
             <HeaderContainer/>
