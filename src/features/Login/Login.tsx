@@ -1,13 +1,17 @@
 import React from 'react'
 import {Checkbox, FormControl, FormControlLabel, FormGroup, FormLabel, TextField, Button, Grid} from '@material-ui/core'
-import {useFormik} from "formik";
+import {FormikHelpers, useFormik} from "formik";
 import {LoginParamsType} from "../../api/api-types";
+import {asyncAuthActions, login} from "./auth-reducer";
+import {useAppDispatch} from "../../app/hooks";
 
 type LoginPropsType = {
     loginHandler: (loginData: LoginParamsType) => void
 }
 
 export const Login: React.FC<LoginPropsType> = React.memo(props => {
+
+    const dispatch = useAppDispatch()
 
     const {
         loginHandler,
@@ -18,7 +22,7 @@ export const Login: React.FC<LoginPropsType> = React.memo(props => {
         if (!values.email) {
             errors.email = 'Enter your email';
         } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
-            errors.email = 'Invalid email address';
+            errors.email = 'Enter valid email address';
         }
         if (!values.password) {
             errors.password = 'Enter password';
@@ -35,8 +39,15 @@ export const Login: React.FC<LoginPropsType> = React.memo(props => {
             rememberMe: false
         },
         validate,
-        onSubmit: values => {
-            loginHandler(values)
+        onSubmit: async (values, formikHelpers:FormikHelpers<LoginParamsType>) => {
+            const action = await dispatch(asyncAuthActions.login(values))
+            console.log(action)
+            if(login.rejected.match(action)){
+                if(action.payload?.fieldsErrors?.length){
+                    const error = action.payload.fieldsErrors[0]
+                    formikHelpers.setFieldError(error.field, error.error)
+                }
+            }
         },
     });
 

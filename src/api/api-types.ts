@@ -21,9 +21,10 @@ export type TaskAPIType = {
 export type FieldErrorType = { field: string; error: string };
 
 export type ResponseType<D = {}> = {
-    "data": D
-    "messages": string[]
-    "resultCode": number
+    data: D
+    messages: string[]
+    fieldsErrors?: FieldErrorType[]
+    resultCode: number
 };
 
 export type UpdateTaskRequestType = {

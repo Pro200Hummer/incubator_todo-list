@@ -28,10 +28,10 @@ export const deleteTodoList = createAsyncThunk(
     'todoLists/deleteTodoList',
     async (todoListID: string, {dispatch}) => {
         dispatch(changeAppStatus("loading"))
-        dispatch(todoListSlice.actions.changeEntityStatusAC({entityStatus: 'loading', todoListID}))
+        dispatch(changeEntityStatusAC({entityStatus: 'loading', todoListID}))
         await todoListApi.deleteTodoList(todoListID)
         dispatch(changeAppStatus("succeed"))
-        dispatch(todoListSlice.actions.changeEntityStatusAC({entityStatus: 'idle', todoListID}))
+        dispatch(changeEntityStatusAC({entityStatus: 'idle', todoListID}))
         return {todoListID: todoListID}
     });
 
@@ -115,3 +115,4 @@ export const asyncTodoListActions = {
 }
 export const {changeTodoListFilterAC, changeEntityStatusAC} = todoListSlice.actions
 export const todoListReducer = todoListSlice.reducer
+export type TodoListActionsType = typeof todoListSlice.actions

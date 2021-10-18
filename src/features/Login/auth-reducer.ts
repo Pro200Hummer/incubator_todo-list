@@ -3,6 +3,8 @@ import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 import {asyncAppActions, changeAppStatus} from "../../app/app-reducer";
 import {LoginParamsType} from "../../api/api-types";
 import {authApi} from "../../api/todo-list-api";
+import {AxiosError} from "axios";
+import {ThunkError} from "../../app/store";
 
 export type AuthInitialStateType = {
     isLoggedIn: boolean
@@ -11,42 +13,43 @@ const initialState: AuthInitialStateType = {
     isLoggedIn: false
 }
 
-export const login = createAsyncThunk(
-    'auth/setIsLoggedIn',
-    async (data: LoginParamsType, {dispatch}) => {
-        dispatch(changeAppStatus("loading"))
+export const login = createAsyncThunk<{isLoggedIn: boolean}, LoginParamsType, ThunkError>(
+    'auth/login',
+    async (data: LoginParamsType, thunkAPI) => {
+        thunkAPI.dispatch(changeAppStatus("loading"))
         try {
-            authApi.login(data)
-                .then(res => {
-                    if (res.data.resultCode === 0) {
-                        return
-                    } else {
-                        return handleServerAppError(res.data, dispatch)
-                    }
-                })
+            const res = await authApi.login(data)
+            if (res.data.resultCode === 0) {
+                thunkAPI.dispatch(changeAppStatus("succeed"))
+                return {isLoggedIn: true}
+            } else {
+                handleServerAppError(res.data, thunkAPI.dispatch)
+                return thunkAPI.rejectWithValue({errors: res.data.messages, fieldsErrors: res.data.fieldsErrors})
+            }
         } catch (err) {
-            return handleServerNetworkError(err, dispatch)
+            const error: AxiosError = err
+            handleServerNetworkError(err, thunkAPI.dispatch)
+            return thunkAPI.rejectWithValue({errors: [error.message], fieldsErrors: []})
         }
-        dispatch(changeAppStatus("succeed"))
     });
 
 export const logout = createAsyncThunk(
-    'auth/removeLogin',
+    'auth/logout',
     async (_, {dispatch}) => {
         dispatch(changeAppStatus("loading"))
         try {
-            authApi.logout()
-                .then(res => {
-                    if (res.data.resultCode === 0) {
-                        return
-                    } else {
-                        return handleServerAppError(res.data, dispatch)
-                    }
-                })
+            const res = await authApi.logout()
+            if (res.data.resultCode === 0) {
+                dispatch(changeAppStatus('succeed'))
+                return {isLoggedIn: false}
+            } else {
+                handleServerAppError(res.data, dispatch)
+                return {isLoggedIn: true}
+            }
         } catch (error) {
-            return handleServerNetworkError(error.message, dispatch)
+            handleServerNetworkError(error.message, dispatch)
+            return {isLoggedIn: true}
         }
-        dispatch(changeAppStatus('succeed'))
     });
 
 export const authSlice = createSlice({
@@ -56,16 +59,16 @@ export const authSlice = createSlice({
     extraReducers: builder => {
         builder
             .addCase(asyncAppActions.initializedApp.fulfilled,
-                (state) => {
-                    state.isLoggedIn = true
+                (state,action) => {
+                    state.isLoggedIn = action.payload.status
                 })
             .addCase(login.fulfilled,
-                (state) => {
-                    state.isLoggedIn = true
+                (state, action) => {
+                    state.isLoggedIn = action.payload.isLoggedIn
                 })
             .addCase(logout.fulfilled,
-                (state) => {
-                    state.isLoggedIn = false
+                (state, action) => {
+                    state.isLoggedIn = action.payload.isLoggedIn
                 })
     }
 });
@@ -73,3 +76,4 @@ export const authSlice = createSlice({
 /*export const {setIsLoggedInAC} = authSlice.actions*/
 export const asyncAuthActions = {login, logout}
 export const authReducer = authSlice.reducer
+export type AuthActionsType = typeof authSlice.actions

@@ -3,9 +3,9 @@ import {handleServerAppError, handleServerNetworkError} from "../../../utils/app
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 import {changeAppStatus} from "../../../app/app-reducer";
 import {asyncTodoListActions} from "../todolist-reducer";
-import {RootStateType} from "../../../app/store";
 import {AddTaskActionType, RemoveTaskActionType, TaskStateType, TaskType, UpdateTaskActionType} from "./task-types";
 import {UpdateTaskRequestType} from "../../../api/api-types";
+import {RootStateType} from "../../../app/store";
 
 const initialState: TaskStateType = {}
 
@@ -142,3 +142,4 @@ export const taskSlice = createSlice({
 
 export const asyncTasksActions = {fetchTasks, removeTask, addTask, updateTask}
 export const tasksReducer = taskSlice.reducer
+export type TasksActionType = typeof taskSlice.actions

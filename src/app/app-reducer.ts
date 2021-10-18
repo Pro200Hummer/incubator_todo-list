@@ -20,20 +20,18 @@ export const initializedApp = createAsyncThunk(
     async (_, {dispatch}) => {
         dispatch(changeAppStatus("loading"))
         try {
-            await authApi.me()
-                .then(res => {
-                    if (res.data.resultCode === 0) {
-                        /*dispatch(setIsLoggedInAC(true))*/
-                        dispatch(setIsInitialized(true))
-                        return
-                    } else {
-                       return  handleServerAppError(res.data, dispatch)
-                    }
-                })
+            const res = await authApi.me()
+            if (res.data.resultCode === 0) {
+                dispatch(changeAppStatus("succeed"))
+                return {status: true}
+            } else {
+                handleServerAppError(res.data, dispatch)
+                return {status: false}
+            }
         } catch (err) {
-            return handleServerNetworkError(err, dispatch)
+            handleServerNetworkError(err, dispatch)
+            return {status: false}
         }
-        dispatch(changeAppStatus("succeed"))
     }
 );
 
@@ -47,18 +45,23 @@ export const appSlice = createSlice({
         setError: (state, action: PayloadAction<string | null>) => {
             state.error = action.payload
         },
-        setIsInitialized: (state, action: PayloadAction<boolean>) => {
-            state.isInitialized = action.payload
-        },
         setModalStatus: (state, action: PayloadAction<ModalType>) => {
             state.modal = action.payload
         },
+    },
+    extraReducers: builder => {
+        builder
+            .addCase(initializedApp.fulfilled, (state) => {
+                state.isInitialized = true
+            })
     }
 });
 
 export const asyncAppActions = {initializedApp}
-export const {changeAppStatus, setError, setIsInitialized, setModalStatus} = appSlice.actions
+export const {changeAppStatus, setError, setModalStatus} = appSlice.actions
 export const appReducer = appSlice.reducer
+
+export type AppActionsType = typeof appSlice.actions
 
 
 

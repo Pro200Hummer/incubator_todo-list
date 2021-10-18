@@ -3,7 +3,6 @@ import HeaderContainer from "../features/Header/HeaderContainer";
 import ErrorSnackbarContainer from "../components/ErrorSnackbar/ErroSnackbarContainer";
 import {Routes} from "../features/Routes";
 import {useDispatch} from "react-redux";
-import {CircularProgress} from "@material-ui/core";
 import {useAppSelector} from "./hooks";
 import {initializedApp} from "./app-reducer";
 import {ModalContainer} from "../components/Modal/ModalContainer";
@@ -17,13 +16,13 @@ export const App: React.FC = () => {
         dispatch(initializedApp())
     }, [dispatch])
 
-    if (!isInitialized) {
+   /* if (!isInitialized) {
         return (
             <div style={{position: 'fixed', top: '30%', textAlign: 'center', width: '100%'}}>
                 <CircularProgress/>
             </div>
         )
-    }
+    }*/
     return (
         <div>
             <HeaderContainer/>
