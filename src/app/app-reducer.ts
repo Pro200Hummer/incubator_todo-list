@@ -2,42 +2,38 @@ import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {handleServerAppError, handleServerNetworkError} from "../utils/app-utils";
 import {authApi} from "../api/todo-list-api";
 import {AppReducerStateType, ModalType, RequestStatusType} from "./app-types";
+import {setIsLoggedInAC} from "../features/Login/auth-reducer";
 
-const initialState: AppReducerStateType = {
-    status: 'idle',
-    error: null,
-    isInitialized: false,
-    modal: {
-        isOpen: false,
-        modalTitle: '',
-        modalStatus: 'no-status',
-        itemID: '',
-    }
-}
-
-export const initializedApp = createAsyncThunk(
-    'app/initializedApp',
-    async (_, {dispatch}) => {
-        dispatch(changeAppStatus("loading"))
+export const initializedApp = createAsyncThunk('app/initializedApp', async (_, thunkAPI) => {
+        thunkAPI.dispatch(changeAppStatus("loading"))
         try {
             const res = await authApi.me()
             if (res.data.resultCode === 0) {
-                dispatch(changeAppStatus("succeed"))
-                return {status: true}
+                thunkAPI.dispatch(changeAppStatus("succeed"))
+                return thunkAPI.dispatch(setIsLoggedInAC(true))
             } else {
-                handleServerAppError(res.data, dispatch)
-                return {status: false}
+                handleServerAppError(res.data, thunkAPI.dispatch)
+                return thunkAPI.dispatch(setIsLoggedInAC(false))
             }
         } catch (err) {
-            handleServerNetworkError(err, dispatch)
-            return {status: false}
+            handleServerNetworkError(err, thunkAPI.dispatch)
+            return thunkAPI.dispatch(setIsLoggedInAC(false))
         }
-    }
-);
+    });
 
 export const appSlice = createSlice({
     name: 'app',
-    initialState,
+    initialState: {
+        status: 'idle',
+        error: null,
+        isInitialized: false,
+        modal: {
+            isOpen: false,
+            modalTitle: '',
+            modalStatus: 'no-status',
+            itemID: '',
+        }
+    } as AppReducerStateType,
     reducers: {
         changeAppStatus: (state, action: PayloadAction<RequestStatusType>) => {
             state.status = action.payload
@@ -60,8 +56,6 @@ export const appSlice = createSlice({
 export const asyncAppActions = {initializedApp}
 export const {changeAppStatus, setError, setModalStatus} = appSlice.actions
 export const appReducer = appSlice.reducer
-
-export type AppActionsType = typeof appSlice.actions
 
 
 
