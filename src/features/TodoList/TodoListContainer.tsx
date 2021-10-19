@@ -1,20 +1,15 @@
 import React, {useCallback, useEffect} from 'react'
-import {useDispatch} from "react-redux";
 import Grid from "@material-ui/core/Grid";
 import AddItemForm from "../../components/AddItemForm/AddItemForm";
 import {Container, IconButton} from "@material-ui/core";
 import {AddCircle} from "@material-ui/icons";
 import Paper from "@material-ui/core/Paper";
 import TodoList from "./TodoList";
-import { Redirect } from 'react-router-dom';
-import {useAppSelector} from "../../app/hooks";
-import {
-    asyncTodoListActions,
-    changeTodoListFilterAC
-} from "./todolist-reducer";
+import {Redirect} from 'react-router-dom';
+import {useAppDispatch, useAppSelector} from "../../app/hooks";
+import {asyncTodoListActions, changeTodoListFilterAC} from "./todolist-reducer";
 import {asyncTasksActions} from "./Task/tasks-reducer";
 import {changeModalStatus} from "../../utils/app-utils";
-
 
 
 const TodoListContainer = React.memo(() => {
@@ -22,7 +17,7 @@ const TodoListContainer = React.memo(() => {
     const todoLists = useAppSelector((state) => state.todoLists)
     const isLoggedIn = useAppSelector((state) => state.auth.isLoggedIn)
 
-    const dispatch = useDispatch()
+    const dispatch = useAppDispatch();
 
     useEffect(() => {
         if(!isLoggedIn){

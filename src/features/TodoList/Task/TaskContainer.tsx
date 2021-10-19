@@ -1,7 +1,6 @@
 import React, {useCallback, useEffect} from "react";
 import {Task} from "./Task";
-import {useDispatch} from "react-redux";
-import {useAppSelector} from "../../../app/hooks";
+import {useAppDispatch, useAppSelector} from "../../../app/hooks";
 import {asyncTasksActions} from "./tasks-reducer";
 import {FilterValuesType} from "../todo-list-types";
 import {TaskStatuses} from "./task-types";
@@ -16,7 +15,7 @@ const TaskContainer: React.FC<TaskContainerPropsType> = (props) => {
 
     const allTasks = useAppSelector((state) => state.tasks)
 
-    const dispatch = useDispatch()
+    const dispatch = useAppDispatch();
 
     useEffect(() => {
         dispatch(asyncTasksActions.fetchTasks(props.todoListID))
@@ -35,7 +34,7 @@ const TaskContainer: React.FC<TaskContainerPropsType> = (props) => {
     }, [dispatch, props.todoListID])
 
     const changeStatusCallback = useCallback((taskID: string, status: TaskStatuses) => {
-        dispatch(asyncTasksActions.updateTask({todoListID: props.todoListID, taskID, model:{status}}))
+        dispatch(asyncTasksActions.updateTask({todoListID: props.todoListID, taskID, model: {status}}))
     }, [dispatch, props.todoListID])
 
     const changeTaskTitleCallback = useCallback((taskID: string, taskTitle: string) => {

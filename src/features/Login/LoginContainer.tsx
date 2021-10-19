@@ -9,7 +9,7 @@ import {LoginParamsType} from "../../api/api-types";
 export const LoginContainer: React.FC = React.memo(() => {
 
     const isLoggedIn = useAppSelector((state) => state.auth.isLoggedIn)
-    const dispatch = useAppDispatch()
+    const dispatch = useAppDispatch();
 
     const loginHandler = useCallback(async (loginData: LoginParamsType) => {
         const action = await dispatch(asyncAuthActions.login(loginData))
