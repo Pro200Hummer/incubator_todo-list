@@ -20,7 +20,7 @@ export const ModalContainer: FC = memo(() => {
         if(modal.modalStatus === 'add-list') dispatch(createTodoList(title))
 
         if(modal.modalStatus === 'add-task'){
-            if(modal.itemID)  dispatch(addTask({todoListID: modal.itemID, taskTitle: title}))
+            modal.itemID && dispatch(addTask({todoListID: modal.itemID, taskTitle: title}))
         }
         dispatch(setModalStatus({modalStatus: "no-status", isOpen: false, modalTitle: null}))
     }, [dispatch, modal.itemID, modal.modalStatus])

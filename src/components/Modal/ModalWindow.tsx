@@ -1,4 +1,5 @@
 import React, {FC, memo} from 'react';
+import style from './ModalWindow.module.scss'
 import {Typography} from "@material-ui/core";
 import AddItemForm from "../AddItemForm/AddItemForm";
 
@@ -13,7 +14,7 @@ export const ModalWindow: FC<ModalWindowType> = memo(props => {
         addTitle
     } = props
 
-    return <div>
+    return <div className={style.container}>
         <Typography variant="h5">
             {title}
         </Typography>

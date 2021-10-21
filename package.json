@@ -20,6 +20,7 @@
     "@types/uuid": "^8.3.0",
     "axois": "^0.0.1-security",
     "formik": "^2.2.9",
+    "node-sass": "4.14.1",
     "react": "^17.0.2",
     "react-dom": "^16.13.1",
     "react-redux": "^7.2.3",
