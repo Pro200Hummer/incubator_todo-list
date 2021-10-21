@@ -1,12 +1,13 @@
 import React, {MouseEvent, useCallback} from 'react';
-import '../../app/App.css';
-import AddItemForm from "../../components/AddItemForm/AddItemForm";
+import '../../app/App.css'
 import EditableSpan from "../../components/EditableSpan/EditableSpan";
-import {Button} from "@material-ui/core";
+import {Button, Tooltip} from "@material-ui/core";
 import IconButton from "@material-ui/core/IconButton";
-import {Delete} from "@material-ui/icons";
+import {AddCircle, Delete} from "@material-ui/icons";
 import TaskContainer from "./Task/TaskContainer";
 import {TodoListDomainType} from "./todo-list-types";
+import {changeModalStatus} from "../../utils/app-utils";
+import {useAppDispatch} from "../../app/hooks";
 
 export type TodoListPropsType = {
     todoList: TodoListDomainType
@@ -20,13 +21,14 @@ export type TodoListPropsType = {
 
 const TodoList: React.FC<TodoListPropsType> = React.memo(props => {
     console.log("todolist")
+    const dispatch = useAppDispatch();
+
     const {
         todoList,
         disable,
         removeTodoList,
         changeTodoListFilter,
         changeTodoListTitle,
-        addTaskForTodoList,
     } = props
 
     const changeFilter = useCallback((e: MouseEvent<HTMLButtonElement>) => {
@@ -36,10 +38,6 @@ const TodoList: React.FC<TodoListPropsType> = React.memo(props => {
     const deleteTodoList = useCallback(() => {
         removeTodoList(todoList.id)
     }, [removeTodoList, todoList.id])
-
-    const addTask = useCallback((title: string) => {
-        addTaskForTodoList(title, todoList.id)
-    }, [todoList.id, addTaskForTodoList])
 
     const changeTitle = useCallback((title: string) => {
         changeTodoListTitle(title, todoList.id)
@@ -53,11 +51,21 @@ const TodoList: React.FC<TodoListPropsType> = React.memo(props => {
                     changeItem={ changeTitle }
                     disabled={disable}
                 />
-                <IconButton onClick={ deleteTodoList } disabled={disable}>
-                    <Delete/>
-                </IconButton>
+                <Tooltip title={`Delete List: ${todoList.title}`}>
+                    <IconButton onClick={ deleteTodoList } disabled={disable}>
+                        <Delete/>
+                    </IconButton>
+                </Tooltip>
+                <Tooltip title={"Add Task"}>
+                    <IconButton onClick={e => changeModalStatus(e, dispatch, todoList.id)}>
+                        <AddCircle
+                            fontSize={"medium"}
+                            color={'primary'}
+                            data-action={"add-task"}
+                        />
+                    </IconButton>
+                </Tooltip>
             </h3>
-            <AddItemForm addItem={ addTask } disabled={disable}/>
             <ul className={ "list-style" }>
                 <TaskContainer todoListID={ todoList.id } filter={ todoList.filter }/>
             </ul>

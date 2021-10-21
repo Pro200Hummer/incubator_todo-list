@@ -26,7 +26,7 @@ export const changeModalStatus = (e: MouseEvent<HTMLButtonElement>, dispatch: Di
             dispatch(setModalStatus({
                 isOpen: true,
                 modalStatus: 'add-list',
-                modalTitle: 'Enter the name of the new to-do list',
+                modalTitle: 'Enter new to-do list name',
             }))
         }
         if (trigger.value === 'add-task') {

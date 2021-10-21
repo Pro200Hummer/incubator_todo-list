@@ -1,7 +1,6 @@
 import React, {useCallback, useEffect} from 'react'
 import Grid from "@material-ui/core/Grid";
-import AddItemForm from "../../components/AddItemForm/AddItemForm";
-import {Container, IconButton} from "@material-ui/core";
+import {Container, IconButton, Tooltip} from "@material-ui/core";
 import {AddCircle} from "@material-ui/icons";
 import Paper from "@material-ui/core/Paper";
 import TodoList from "./TodoList";
@@ -37,10 +36,6 @@ const TodoListContainer = React.memo(() => {
             default:
                 return dispatch(changeTodoListFilterAC({filter: "all", id:todoListID}))
         }
-    }, [dispatch])
-
-    const addTodoListCallback = useCallback((todoListTitle: string) => {
-        dispatch(asyncTodoListActions.createTodoList(todoListTitle))
     }, [dispatch])
 
     const changeTodoListTitleCallback = useCallback((title: string, todoListID: string) => {
@@ -80,14 +75,15 @@ const TodoListContainer = React.memo(() => {
     return (
         <Container fixed={ true }>
             <Grid container style={ {margin: "20px 0px"} }>
-                <AddItemForm addItem={ addTodoListCallback }/>
-                <IconButton onClick={e => changeModalStatus(e, dispatch)}>
-                    <AddCircle
-                        fontSize={"large"}
-                        color={'primary'}
-                        data-action={"add-list"}
-                    />
-                </IconButton>
+                <Tooltip title={"Add List"}>
+                    <IconButton onClick={e => changeModalStatus(e, dispatch)}>
+                        <AddCircle
+                            fontSize={"large"}
+                            color={'primary'}
+                            data-action={"add-list"}
+                        />
+                    </IconButton>
+                </Tooltip>
             </Grid>
             <Grid container spacing={ 2 }>
                 { content }

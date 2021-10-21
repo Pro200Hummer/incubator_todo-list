@@ -1,6 +1,8 @@
 .container{
+  width: 350px;
+  padding: 10px 0 10px 10px;
   display: flex;
   flex-flow: column wrap;
   align-items: flex-start;
-  padding: 20px;
+  background: #a7eac5;
 }

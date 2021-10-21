@@ -1,5 +1,5 @@
 import React, {ChangeEvent, useCallback} from 'react';
-import {Checkbox} from '@material-ui/core';
+import {Checkbox, Tooltip} from '@material-ui/core';
 import EditableSpan from '../../../components/EditableSpan/EditableSpan';
 import IconButton from '@material-ui/core/IconButton';
 import {Delete} from '@material-ui/icons';
@@ -44,10 +44,11 @@ export const Task: React.FC<TaskPropsType> = React.memo(props => {
                 checked={ task.status === TaskStatuses.Completed }
             />
             <EditableSpan title={ task.title } changeItem={ changeTitle }/>
-            <IconButton onClick={ removeTask }>
-                <Delete/>
-            </IconButton>
-
+            <Tooltip title={`Delete Task: ${task.title}`}>
+                <IconButton onClick={ removeTask }>
+                    <Delete/>
+                </IconButton>
+            </Tooltip>
         </li>
     )
 });

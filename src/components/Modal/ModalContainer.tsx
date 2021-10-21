@@ -10,6 +10,7 @@ import {setModalStatus} from "../../app/app-reducer";
 export const ModalContainer: FC = memo(() => {
 
     const modal = useAppSelector((state) => state.app.modal)
+
     const dispatch = useAppDispatch();
 
     const handleClose = () => {
@@ -17,6 +18,7 @@ export const ModalContainer: FC = memo(() => {
     }
 
     const addTitleHandler = useCallback((title: string) => {
+        debugger
         if(modal.modalStatus === 'add-list') dispatch(createTodoList(title))
 
         if(modal.modalStatus === 'add-task'){
@@ -34,6 +36,7 @@ export const ModalContainer: FC = memo(() => {
                 <Paper>
                     <ModalWindow
                         title={modal.modalTitle && modal.modalTitle}
+                        handleClose={handleClose}
                         addTitle={addTitleHandler}
                     />
                 </Paper>
