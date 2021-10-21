@@ -1,5 +1,4 @@
-import {AuthInitialStateType, authReducer} from "./auth-reducer";
-import {asyncAppActions} from "../../app/app-reducer";
+import {AuthInitialStateType, authReducer, setIsLoggedInAC} from "./auth-reducer";
 
 let startState: AuthInitialStateType
 beforeEach(() => {
@@ -10,11 +9,9 @@ beforeEach(() => {
 
 test('login status should be changed', () => {
 
-    const anyVoid = () => {}
-
-    const action = asyncAppActions.initializedApp.fulfilled(anyVoid(), 'requestId', anyVoid())
+    const action = setIsLoggedInAC(true)
     const endState = authReducer(startState, action)
 
-    expect(endState.isLoggedIn).toBeTruthy()
+    expect(endState.isLoggedIn).toBe(true)
 })
 

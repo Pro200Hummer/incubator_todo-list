@@ -1,4 +1,4 @@
-import {appReducer, changeAppStatus, setError, setIsInitialized} from "./app-reducer";
+import {appReducer, changeAppStatus, setError} from "./app-reducer";
 import { AppReducerStateType } from "./app-types";
 
 
